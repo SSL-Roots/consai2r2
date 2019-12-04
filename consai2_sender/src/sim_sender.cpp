@@ -12,7 +12,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
-#include "consai2r2_msgs/msg/robot_commands.hpp"
+#include "consai2_msgs/msg/robot_commands.hpp"
 
 #include "grSim_Packet.pb.h"
 #include "grSim_Commands.pb.h"
@@ -44,9 +44,9 @@ class SimSender : public rclcpp::Node
 {
 public:
   SimSender()
-  : Node("consai2r2_sim_sender")
+  : Node("consai2_sim_sender")
   {
-    sub_commands_ = this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
+    sub_commands_ = this->create_subscription<consai2_msgs::msg::RobotCommands>(
       "robot_commands",
       10,
       std::bind(&SimSender::send_commands, this, std::placeholders::_1)
@@ -57,7 +57,7 @@ public:
   }
 
 private:
-  void send_commands(const consai2r2_msgs::msg::RobotCommands::SharedPtr msg) const 
+  void send_commands(const consai2_msgs::msg::RobotCommands::SharedPtr msg) const 
   {
     const double MAX_KICK_SPEED = 8.0; // m/s
     grSim_Commands *packet_commands = new grSim_Commands();
@@ -101,7 +101,7 @@ private:
     udp_->udp_send(output);
   }
 
-  rclcpp::Subscription<consai2r2_msgs::msg::RobotCommands>::SharedPtr sub_commands_;
+  rclcpp::Subscription<consai2_msgs::msg::RobotCommands>::SharedPtr sub_commands_;
   std::shared_ptr<simple_udp> udp_;
 };
 
