@@ -9,6 +9,8 @@ def generate_launch_description():
 
     # parameter
     param_joydev = LaunchConfiguration('joydev')
+    param_sim = LaunchConfiguration('sim') #TODO : 現在未使用 シミュレータの切り替え用
+    # TODO : consai2r2_descriptionからのパラメータ読み込み
 
     ld = LaunchDescription([
         DeclareLaunchArgument(
