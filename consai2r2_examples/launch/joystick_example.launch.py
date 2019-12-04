@@ -1,18 +1,40 @@
 from launch import LaunchDescription
-import launch_ros.actions
+from launch.substitutions import LaunchConfiguration
+from launch.actions import DeclareLaunchArgument
+from launch_ros.actions import Node
+
+
 
 def generate_launch_description():
-    return LaunchDescription([
-        launch_ros.actions.Node(
+
+    # parameter
+    param_joydev = LaunchConfiguration('joydev')
+
+    ld = LaunchDescription([
+        DeclareLaunchArgument(
+            'joydev', default_value='/dev/input/js0',
+            description='joystick device file'
+    )])
+
+    joy_node = Node(
             package='joy', node_executable='joy_node',
-            output='screen'
-        ),
-        launch_ros.actions.Node(
+            output='screen',
+            parameters=[{'_dev' : param_joydev}]
+    )
+
+    teleop_node = Node(
             package='consai2r2_teleop', node_executable='teleop_node',
             output='screen'
-        ),
-        launch_ros.actions.Node(
+    )
+
+    sender = Node(
             package='consai2r2_sender', node_executable='sim_sender',
             output='screen'
-        ),
-    ])
+    )
+
+    ld.add_action(joy_node)
+    ld.add_action(teleop_node)
+    ld.add_action(sender)
+
+    return ld
+    
