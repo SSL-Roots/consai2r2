@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(consai2_sender)
-
+project(consai2r2_teleop)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -14,36 +13,39 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(consai2_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(consai2r2_msgs REQUIRED)
 
-# Protobuf
-find_package(Protobuf REQUIRED)
-include_directories(${PROTOBUF_INCLUDE_DIRS})
-protobuf_generate_cpp(PROTO_CPP PROTO_H
-  include/${PROJECT_NAME}/proto/grSim_Replacement.proto
-  include/${PROJECT_NAME}/proto/grSim_Commands.proto
-  include/${PROJECT_NAME}/proto/grSim_Packet.proto
-)
+include_directories(include)
 
-include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
-add_executable(sim_sender 
-  src/sim_sender.cpp
-  ${PROTO_CPP}
-  ${PROTO_H}
-)
+add_library(joystick_component SHARED src/joystick_component.cpp)
+target_compile_definitions(joystick_component PRIVATE "RASPIMOUSE_EXAMPLES_BUILDING_DLL")
+ament_target_dependencies(joystick_component
+  rclcpp
+  rclcpp_components
+  std_msgs
+  sensor_msgs
+  consai2r2_msgs
+  )
+rclcpp_components_register_nodes(joystick_component "joystick::JoystickComponent")
+
+add_executable(teleop_node src/teleop_node.cpp)
+target_link_libraries(teleop_node joystick_component)
 ament_target_dependencies(
-  sim_sender
+  teleop_node
   "rclcpp"
-  "std_msgs"
-  "consai2_msgs"
 )
-install(TARGETS sim_sender
+
+install(TARGETS
+  joystick_component
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin)
+install(TARGETS teleop_node
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
-
-target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES})
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
