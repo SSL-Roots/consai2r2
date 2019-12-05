@@ -23,6 +23,11 @@ jobs:
                   sudo apt install ros-dashing-desktop
 
                   source /opt/ros/dashing/setup.bash
+
+                  # Install colcon
+                  # Ref: https://index.ros.org/doc/ros2/Tutorials/Colcon-Tutorial/
+                  sudo apt install python3-colcon-common-extensions
+
             - name: Clone repository
               run: |
                   mkdir -p ~/ros2_ws/src
@@ -32,6 +37,8 @@ jobs:
               run: |
                   # Protobuf
                   sudo apt install libprotobuf-dev libprotoc-dev protobuf-compiler
+                  # Joy (TODO: USE rosdep install)
+                  sudo apt install ros-dashing-joy
                   # source /opt/ros/dashing/setup.bash
                   # cd ~/ros2_ws/src
                   # rosdep install -r -y --from-paths --ignore-src crane_x7_ros
@@ -41,3 +48,4 @@ jobs:
                   cd ~/ros2_ws
                   colcon build
                   source ~/ros2_ws/install/setup.bash
+
