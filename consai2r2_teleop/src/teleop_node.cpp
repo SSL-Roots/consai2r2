@@ -1,3 +1,6 @@
+/*
+ * Copyright (c) 2019 SSL-Roots
+ */
 
 #include <rclcpp/rclcpp.hpp>
 #include <memory>

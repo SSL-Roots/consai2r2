@@ -1,11 +1,18 @@
+/*
+ * Copyright (c) 2019 SSL-Roots
+ */
+
 
 #include "consai2r2_teleop/joystick_component.hpp"
+
+#include <rclcpp_components/register_node_macro.hpp>
 
 #include <chrono>
 #include <cstdio>
 #include <memory>
 #include <string>
 #include <cmath>
+
 
 using namespace std::chrono_literals;
 
@@ -16,7 +23,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   : Node("consai2r2_teleop", options)
 {
   RCLCPP_INFO(this->get_logger(), "hello world");
-  auto callback = 
+  auto callback =
     [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void
     {
         publish_robot_commands(msg);
@@ -28,7 +35,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
 
 void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
-  // TODO: WE HAVE TO USE ROS_PARAM
+  // TODO(SSL-Roots): WE HAVE TO USE ROS_PARAM
   const int BUTTON_SHUTDOWN_1 = 8;
   const int BUTTON_SHUTDOWN_2 = 8;
   const int BUTTON_MOVE_ENABLE = 4;
@@ -61,8 +68,6 @@ void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::Shar
 
 
 
-} // namespace joystick
-
-#include <rclcpp_components/register_node_macro.hpp>
+}  // namespace joystick
 
 RCLCPP_COMPONENTS_REGISTER_NODE(joystick::JoystickComponent)

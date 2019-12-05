@@ -1,7 +1,6 @@
-
-#include <iostream>
-#include <memory>
-
+/*
+ * Copyright (c) 2019 SSL-Roots
+ */
 // for UDP communication
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -9,6 +8,10 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+
+#include <iostream>
+#include <memory>
+#include <string>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
@@ -29,7 +32,7 @@ public:
         sock = socket(AF_INET, SOCK_DGRAM, 0);
         addr.sin_family = AF_INET;
         addr.sin_addr.s_addr = inet_addr(address.c_str());
-        addr.sin_port = htons(port);        
+        addr.sin_port = htons(port);
     }
     void udp_send(std::string word){
         sendto(sock, word.c_str(), word.length(), 0, (struct sockaddr *)&addr, sizeof(addr));
@@ -52,14 +55,14 @@ public:
       std::bind(&SimSender::send_commands, this, std::placeholders::_1)
       );
 
-    // TODO: USE ROS_PARAM FOR ADDR AND PORT
+    // TODO(SSL-Roots): USE ROS_PARAM FOR ADDR AND PORT
     udp_ = std::make_shared<simple_udp>("127.0.0.1", 20011);
   }
 
 private:
-  void send_commands(const consai2r2_msgs::msg::RobotCommands::SharedPtr msg) const 
+  void send_commands(const consai2r2_msgs::msg::RobotCommands::SharedPtr msg) const
   {
-    const double MAX_KICK_SPEED = 8.0; // m/s
+    const double MAX_KICK_SPEED = 8.0;  // m/s
     grSim_Commands *packet_commands = new grSim_Commands();
 
     packet_commands->set_timestamp(msg->header.stamp.sec);
