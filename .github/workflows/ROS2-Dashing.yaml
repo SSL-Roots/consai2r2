@@ -23,11 +23,6 @@ jobs:
                   sudo apt install ros-dashing-desktop
 
                   source /opt/ros/dashing/setup.bash
-
-                  # Install colcon
-                  # Ref: https://index.ros.org/doc/ros2/Tutorials/Colcon-Tutorial/
-                  sudo apt install python3-colcon-common-extensions
-
             - name: Clone repository
               run: |
                   mkdir -p ~/ros2_ws/src
@@ -45,6 +40,9 @@ jobs:
             - name: Build packages
               run: |
                   source /opt/ros/dashing/setup.bash
+                  # Install colcon
+                  # Ref: https://index.ros.org/doc/ros2/Tutorials/Colcon-Tutorial/
+                  sudo apt install python3-colcon-common-extensions
                   cd ~/ros2_ws
                   colcon build
                   source ~/ros2_ws/install/setup.bash
