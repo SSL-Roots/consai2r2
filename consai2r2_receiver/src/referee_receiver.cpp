@@ -18,7 +18,7 @@ class RefereeReceiver : public rclcpp::Node
 {
 public:
   RefereeReceiver()
-  : Node("consai2r2_sim_sender")
+  : Node("consai2r2_referee_receiver")
   {
     pub = this->create_publisher<consai2r2_msgs::msg::Referee>("~/raw_referee", 1);
 
