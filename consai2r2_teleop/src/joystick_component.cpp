@@ -13,11 +13,40 @@ namespace joystick {
 JoystickComponent::JoystickComponent(const rclcpp::NodeOptions &options)
     : Node("consai2r2_teleop", options) {
   RCLCPP_INFO(this->get_logger(), "hello world");
-  auto callback = 
-    [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void
-    {
-        publish_robot_commands(msg);
-    };
+  button_shutdown_1_ = this->declare_parameter("button_shutdown_1", 8);
+  button_shutdown_2_ = this->declare_parameter("button_shutdown_2", 8);
+  button_move_enable_ = this->declare_parameter("button_move_enable", 4);
+  axis_vel_surge_ = this->declare_parameter("axis_vel_surge", 1);
+  axis_vel_sway_ = this->declare_parameter("axis_vel_sway", 0);
+  axis_vel_angular_ = this->declare_parameter("axis_vel_angular", 2);
+
+  button_kick_enable_ = this->declare_parameter("button_kick_enable");
+  button_kick_straight_ = this->declare_parameter("button_kick_straight");
+  button_kick_chip_ = this->declare_parameter("button_kick_chip");
+  axis_kick_power_ = this->declare_parameter("axis_kick_power");
+
+  button_dribble_enable_ = this->declare_parameter("button_dribble_enable");
+  axis_dribble_power_ = this->declare_parameter("axis_dribble_power");
+
+  button_id_enable_ = this->declare_parameter("button_id_enable");
+  axis_id_change_ = this->declare_parameter("axis_id_change");
+
+  button_color_enable_ = this->declare_parameter("button_color_enable");
+  axis_color_change_ = this->declare_parameter("axis_color_change");
+
+  button_all_id_1_ = this->declare_parameter("button_all_id_1");
+  button_all_id_2_ = this->declare_parameter("button_all_id_2");
+  button_all_id_3_ = this->declare_parameter("button_all_id_3");
+  button_all_id_4_ = this->declare_parameter("button_all_id_4");
+
+  button_path_enable_ = this->declare_parameter("button_path_enable");
+  button_add_pose_ = this->declare_parameter("button_add_pose");
+  button_delete_path_ = this->declare_parameter("button_delete_path");
+  button_send_target_ = this->declare_parameter("button_send_target");
+
+  auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
+    publish_robot_commands(msg);
+  };
 
   pub_commands_ = create_publisher<consai2r2_msgs::msg::RobotCommands>(
       "robot_commands", 10);
