@@ -1,21 +1,19 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>consai2r2_msgs</name>
+  <name>consai2r2_receiver</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Receive messages from SSL-Vision, SSL-Referee and grSim</description>
   <maintainer email="macakasit@gmail.com">akshota</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>rosidl_default_generators</depend>
-  <depend>builtin_interfaces</depend>
+  <depend>rclcpp</depend>
   <depend>std_msgs</depend>
-  <depend>sensor_msgs</depend>
-  <depend>geometry_msgs</depend>
-
-  <member_of_group>rosidl_interface_packages</member_of_group>
+  <depend>consai2r2_msgs</depend>
+  <depend>protobuf-dev</depend>
+  <depend>boost</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
