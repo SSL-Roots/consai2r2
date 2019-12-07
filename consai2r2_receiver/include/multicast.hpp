@@ -1,3 +1,6 @@
+#ifndef CONSAI2R2_MULTICAST_HPP_
+#define CONSAI2R2_MULTICAST_HPP_
+
 #include <iostream>
 #include <exception>
 #include <stdexcept>
@@ -15,7 +18,7 @@ public:
     asio::ip::address addr = asio::ip::address::from_string(ip);
     if (!addr.is_multicast())
     {
-      throw std::runtime_error("excpeted a multicast address");
+      throw std::runtime_error("excpeted multicast address");
     }
 
     socket.set_option(asio::ip::multicast::join_group(addr.to_v4()));
@@ -43,3 +46,5 @@ private:
     asio::ip::udp::endpoint endpoint;
     asio::ip::udp::socket socket;
 };
+
+#endif

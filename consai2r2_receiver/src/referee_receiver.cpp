@@ -8,7 +8,7 @@
 #include "consai2r2_msgs/msg/referee.hpp"
 #include "referee.pb.h"
 
-#include "multicast.h"
+#include "multicast.hpp"
 
 
 using std::placeholders::_1;
