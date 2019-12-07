@@ -1,23 +1,19 @@
 #ifndef CONSAI2R2_MULTICAST_HPP_
 #define CONSAI2R2_MULTICAST_HPP_
 
-#include <iostream>
-#include <exception>
-#include <stdexcept>
 #include <boost/asio.hpp>
+#include <exception>
+#include <iostream>
+#include <stdexcept>
 
 namespace asio = boost::asio;
 
-class MulticastReceiver
-{
-public:
-  MulticastReceiver(const std::string& ip, const int port)  :
-    endpoint(asio::ip::udp::v4(), port),
-    socket(io_service, endpoint)
-  {
+class MulticastReceiver {
+ public:
+  MulticastReceiver(const std::string& ip, const int port)
+      : endpoint(asio::ip::udp::v4(), port), socket(io_service, endpoint) {
     asio::ip::address addr = asio::ip::address::from_string(ip);
-    if (!addr.is_multicast())
-    {
+    if (!addr.is_multicast()) {
       throw std::runtime_error("excpeted multicast address");
     }
 
@@ -26,25 +22,23 @@ public:
     socket.non_blocking(true);
   }
 
-  size_t receive(std::vector<char>& msg)
-  {
+  size_t receive(std::vector<char>& msg) {
     boost::system::error_code error;
-    const size_t received = socket.receive_from(asio::buffer(msg), endpoint, 0, error);
-    if (error && error != asio::error::message_size)
-    {
+    const size_t received =
+        socket.receive_from(asio::buffer(msg), endpoint, 0, error);
+    if (error && error != asio::error::message_size) {
       throw boost::system::system_error(error);
       return 0;
     }
     return received;
   }
 
-  size_t available(){
-    return socket.available();
-  }
-private:
-    asio::io_service io_service;
-    asio::ip::udp::endpoint endpoint;
-    asio::ip::udp::socket socket;
+  size_t available() { return socket.available(); }
+
+ private:
+  asio::io_service io_service;
+  asio::ip::udp::endpoint endpoint;
+  asio::ip::udp::socket socket;
 };
 
 #endif
