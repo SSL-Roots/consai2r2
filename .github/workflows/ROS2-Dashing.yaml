@@ -30,13 +30,9 @@ jobs:
                   git clone https://github.com/SSL-Roots/consai2r2
             - name: Install dependencies
               run: |
-                  # Protobuf
-                  sudo apt install libprotobuf-dev libprotoc-dev protobuf-compiler
-                  # Joy (TODO: USE rosdep install)
-                  sudo apt install ros-dashing-joy
-                  # source /opt/ros/dashing/setup.bash
-                  # cd ~/ros2_ws/src
-                  # rosdep install -r -y --from-paths --ignore-src crane_x7_ros
+                  source /opt/ros/dashing/setup.bash
+                  cd ~/ros2_ws/src
+                  rosdep install -r -y --from-paths . --ignore-src
             - name: Build packages
               run: |
                   source /opt/ros/dashing/setup.bash
