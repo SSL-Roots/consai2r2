@@ -30,7 +30,7 @@ public:
 
     timer_ = create_wall_timer(16ms, std::bind(&RefereeReceiver::timer_callback, this));
 
-    receiver = std::auto_ptr<MulticastReceiver>(new MulticastReceiver(this->referee_addr, this->referee_port));
+    receiver = std::unique_ptr<MulticastReceiver>(new MulticastReceiver(this->referee_addr, this->referee_port));
   }
 
 private:
@@ -98,7 +98,7 @@ private:
   rclcpp::Publisher<consai2r2_msgs::msg::Referee>::SharedPtr pub;
   rclcpp::TimerBase::SharedPtr timer_;
 
-  std::auto_ptr<MulticastReceiver> receiver;
+  std::unique_ptr<MulticastReceiver> receiver;
   std::string referee_addr;
   int referee_port;
 };
