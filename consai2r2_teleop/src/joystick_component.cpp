@@ -91,17 +91,6 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions &options)
 
 void JoystickComponent::publish_robot_commands(
     const sensor_msgs::msg::Joy::SharedPtr msg) {
-  // TODO: WE HAVE TO USE ROS_PARAM
-  const int BUTTON_SHUTDOWN_1 = 8;
-  const int BUTTON_SHUTDOWN_2 = 8;
-  const int BUTTON_MOVE_ENABLE = 4;
-  const int AXIS_VEL_SURGE = 1;
-  const int AXIS_VEL_SWAY = 0;
-  const int AXIS_VEL_ANGULAR = 2;
-
-  const double MAX_VEL_SURGE = 1.0;
-  const double MAX_VEL_SWAY = 1.0;
-  const double MAX_VEL_ANGULAR = M_PI;
 
   consai2r2_msgs::msg::RobotCommand command;
 
@@ -112,10 +101,31 @@ void JoystickComponent::publish_robot_commands(
     return;
   }
 
-  if (msg->buttons[BUTTON_MOVE_ENABLE]) {
-    command.vel_surge = msg->axes[AXIS_VEL_SURGE] * MAX_VEL_SURGE;
-    command.vel_sway = msg->axes[AXIS_VEL_SWAY] * MAX_VEL_SWAY;
-    command.vel_angular = msg->axes[AXIS_VEL_ANGULAR] * MAX_VEL_ANGULAR;
+  //チームカラー変更
+  if (msg->buttons[button_conf_.color_enable]) {
+    if (std::abs(msg->axes[axis_conf_.color_change]) > 0) {
+      direct_control_.is_yellow_ != direct_control_.is_yellow_;
+      RCLCPP_INFO(this->get_logger(), "is_yellow : %s",
+                  direct_control_.is_yellow_ ? "True" : "False");
+      //キーが離れるまでループ
+      while (msg->axes[axis_conf_.color_change] != 0)
+        ;
+    }
+  }
+
+  // ID変更
+  if (msg->buttons[button_conf_.id_enable]) {
+    if (std::abs(msg->axes[axis_conf_.id_change]) > 0) {
+      direct_control_.robot_id_ +=
+          static_cast<int>(msg->axes[axis_conf_.id_change]);
+
+      //      if(direct_control_.robot_id_ > MAX_ID)
+    }
+  }
+  if (msg->buttons[button_conf_.move_enable]) {
+    command.vel_surge = msg->axes[axis_conf_.surge_vel] * MAX_VEL_SURGE_;
+    command.vel_sway = msg->axes[axis_conf_.sway_vel] * MAX_VEL_SWAY_;
+    command.vel_angular = msg->axes[axis_conf_.angular_vel] * MAX_VEL_ANGULAR_;
   }
 
   command.robot_id = 0;
