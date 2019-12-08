@@ -70,7 +70,8 @@ void JoystickComponent::publish_robot_commands(
   consai2r2_msgs::msg::RobotCommand command;
 
   //シャットダウン
-  if (msg->buttons[button_shutdown_1_] && msg->buttons[button_shutdown_2_]) {
+  if (msg->buttons[button_conf_.shutdown_1] &&
+      msg->buttons[button_conf_.shutdown_2]) {
     rclcpp::shutdown();
     return;
   }
