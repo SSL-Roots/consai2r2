@@ -10,10 +10,10 @@
 namespace joystick {
 
 struct DirectControlParams {
-  float kick_power_ = 0.5f;
+  float kick_power = 0.5f;
   float dribble_power = 0.5f;
-  int robot_id_ = 0;
-  bool is_yellow_ = false;
+  int robot_id = 0;
+  bool is_yellow = false;
   bool all_member_control_enable = false;
 };
 
@@ -40,7 +40,7 @@ struct ButtonConfig {
 struct AxisConfig {
   int surge_vel;
   int sway_vel;
-  int vel_angular;
+  int angular_vel;
   int kick_power;
   int dribble_power;
   int id_change;
@@ -58,15 +58,15 @@ private:
 
   ButtonConfig button_conf_;
   AxisConfig axis_conf_;
-  static const float MAX_VEL_SURGE_ = 1.f;
-  static const float MAX_VEL_SWAY_ = 1.f;
-  static const float MAX_VEL_ANGULAR_ = M_PI;
+  static constexpr float MAX_VEL_SURGE_ = 1.f;
+  static constexpr float MAX_VEL_SWAY_ = 1.f;
+  static constexpr float MAX_VEL_ANGULAR_ = M_PI;
 
-  static const float MAX_KICK_POWER_ = 1.f;
-  static const float MAX_POWER_CONTROL_ = 0.1f;
+  static constexpr float MAX_KICK_POWER_ = 1.f;
+  static constexpr float MAX_POWER_CONTROL_ = 0.1f;
 
-  static const float MAX_DRIBBLE_POWER_ = 1.f;
-  static const float DRIBBLE_POWER_CONTROL_ = 0.1f;
+  static constexpr float MAX_DRIBBLE_POWER_ = 1.f;
+  static constexpr float DRIBBLE_POWER_CONTROL_ = 0.1f;
 
   bool indirect_control_enable_ = true;
 
