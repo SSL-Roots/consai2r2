@@ -23,11 +23,11 @@ jobs:
                   sudo apt install ros-dashing-desktop
 
                   source /opt/ros/dashing/setup.bash
-            - name: Clone repository
+            - uses: actions/checkout@v2-beta
+            - name: Copy repository
               run: |
-                  mkdir -p ~/ros2_ws/src
-                  cd ~/ros2_ws/src
-                  git clone https://github.com/SSL-Roots/consai2r2
+                  mkdir -p ~/ros2_ws/src/consai2r2
+                  cp -rf . ~/ros2_ws/src/consai2r2
             - name: Install dependencies
               run: |
                   source /opt/ros/dashing/setup.bash
@@ -45,4 +45,12 @@ jobs:
                   cd ~/ros2_ws
                   colcon build
                   source ~/ros2_ws/install/setup.bash
+            - name: Test packages
+              run: |
+                  source /opt/ros/dashing/setup.bash
+                  source ~/ros2_ws/install/setup.bash
+                  cd ~/ros2_ws
+                  colcon test
+                  colcon test-result --verbose
+
 
