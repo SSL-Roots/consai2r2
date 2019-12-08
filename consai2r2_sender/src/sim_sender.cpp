@@ -18,9 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include <iostream>
-#include <memory>
-
 // for UDP communication
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -28,6 +25,9 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#include <iostream>
+#include <memory>
 
 #include "consai2r2_msgs/msg/robot_commands.hpp"
 #include "rclcpp/rclcpp.hpp"
