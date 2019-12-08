@@ -28,6 +28,7 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 
 #include "consai2r2_msgs/msg/robot_commands.hpp"
 #include "rclcpp/rclcpp.hpp"
