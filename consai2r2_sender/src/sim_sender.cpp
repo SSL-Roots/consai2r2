@@ -65,11 +65,19 @@ class SimSender : public rclcpp::Node
 public:
   SimSender() : Node("consai2r2_sim_sender")
   {
+    std::string host;
+    int port;
+
+    this->declare_parameter("grsim_addr", "127.0.0.1");
+    this->declare_parameter("grsim_port", 20011);
+
+    this->get_parameter("grsim_addr", host);
+    this->get_parameter("grsim_port", port);
+
     sub_commands_ = this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
       "robot_commands", 10, std::bind(&SimSender::send_commands, this, std::placeholders::_1));
 
-    // TODO: USE ROS_PARAM FOR ADDR AND PORT
-    udp_ = std::make_shared<simple_udp>("127.0.0.1", 20011);
+    udp_ = std::make_shared<simple_udp>(host, port);
   }
 
 private:
