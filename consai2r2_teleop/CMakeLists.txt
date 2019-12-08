@@ -28,7 +28,7 @@ ament_target_dependencies(joystick_component
   std_msgs
   sensor_msgs
   consai2r2_msgs
-  )
+)
 rclcpp_components_register_nodes(joystick_component "joystick::JoystickComponent")
 
 add_executable(teleop_node src/teleop_node.cpp)

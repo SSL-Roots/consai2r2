@@ -26,7 +26,7 @@ protobuf_generate_cpp(PROTO_CPP PROTO_H
 )
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
-add_executable(sim_sender 
+add_executable(sim_sender
   src/sim_sender.cpp
   ${PROTO_CPP}
   ${PROTO_H}
