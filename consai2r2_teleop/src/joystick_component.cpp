@@ -69,6 +69,12 @@ void JoystickComponent::publish_robot_commands(
 
   consai2r2_msgs::msg::RobotCommand command;
 
+  //シャットダウン
+  if (msg->buttons[button_shutdown_1_] && msg->buttons[button_shutdown_2_]) {
+    rclcpp::shutdown();
+    return;
+  }
+
   if (msg->buttons[BUTTON_MOVE_ENABLE]) {
     command.vel_surge = msg->axes[AXIS_VEL_SURGE] * MAX_VEL_SURGE;
     command.vel_sway = msg->axes[AXIS_VEL_SWAY] * MAX_VEL_SWAY;
