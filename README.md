@@ -96,7 +96,8 @@ ros2 launch consai2r2_examples joystick_example.launch.py
 GitHubのProjects機能で開発方針に合わせたタスク管理をしています。
 
 - [1st step - consai2 to consai2r2 porting](https://github.com/SSL-Roots/consai2r2/projects/1)
-- [2nd step - use ROS2 effectively](https://github.com/SSL-Roots/consai2r2/projects/2)
+- [2nd step - SSL Game Example](https://github.com/SSL-Roots/consai2r2/projects/3)
+- [3rd step - use ROS2 effectively](https://github.com/SSL-Roots/consai2r2/projects/2)
 
 # Controbution
 
