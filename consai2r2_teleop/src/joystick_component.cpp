@@ -104,9 +104,9 @@ void JoystickComponent::publish_robot_commands(
   //チームカラー変更
   if (msg->buttons[button_conf_.color_enable]) {
     if (std::abs(msg->axes[axis_conf_.color_change]) > 0) {
-      direct_control_.is_yellow_ != direct_control_.is_yellow_;
+      direct_control_.is_yellow != direct_control_.is_yellow;
       RCLCPP_INFO(this->get_logger(), "is_yellow : %s",
-                  direct_control_.is_yellow_ ? "True" : "False");
+                  direct_control_.is_yellow ? "True" : "False");
       //キーが離れるまでループ
       while (msg->axes[axis_conf_.color_change] != 0)
         ;
@@ -116,8 +116,8 @@ void JoystickComponent::publish_robot_commands(
   // ID変更
   if (msg->buttons[button_conf_.id_enable]) {
     if (std::abs(msg->axes[axis_conf_.id_change]) > 0) {
-      direct_control_.robot_id_ +=
-          static_cast<int>(msg->axes[axis_conf_.id_change]);
+      //      direct_control_.robot_id_ +=
+      static_cast<int>(msg->axes[axis_conf_.id_change]);
 
       //      if(direct_control_.robot_id_ > MAX_ID)
     }
