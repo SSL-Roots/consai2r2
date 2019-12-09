@@ -1,15 +1,39 @@
+// Copyright (c) 2019 SSL-Roots
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
 #include <chrono>
 #include <exception>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 #include "consai2r2_msgs/msg/vision_detections.hpp"
 #include "consai2r2_msgs/msg/vision_geometry.hpp"
-#include "messages_robocup_ssl_wrapper.pb.h"
 #include "rclcpp/rclcpp.hpp"
 
-#include "multicast.hpp"
+#include "consai2r2_receiver/multicast.hpp"
+
+#include "./messages_robocup_ssl_wrapper.pb.h"
+
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -19,7 +43,7 @@ static const double TO_METER = 0.001;
 class FormatConverter
 {
 public:
-  FormatConverter() { vision_detections = consai2r2_msgs::msg::VisionDetections(); }
+  FormatConverter() {vision_detections = consai2r2_msgs::msg::VisionDetections();}
 
   void append_frame(const SSL_DetectionFrame & packet_detection)
   {
@@ -50,9 +74,9 @@ public:
     this->vision_detections.frames.push_back(detection_frame);
   }
 
-  void frame_clear() { this->vision_detections.frames.clear(); }
+  void frame_clear() {this->vision_detections.frames.clear();}
 
-  consai2r2_msgs::msg::VisionDetections get_frame() { return this->vision_detections; }
+  consai2r2_msgs::msg::VisionDetections get_frame() {return this->vision_detections;}
 
 private:
   consai2r2_msgs::msg::DetectionBall convert_to_ball_topic(const SSL_DetectionBall & raw_ball)
@@ -82,7 +106,8 @@ private:
 class VisionReceiver : public rclcpp::Node
 {
 public:
-  VisionReceiver() : Node("consai2r2_vision_receiver"), converter()
+  VisionReceiver()
+  : Node("consai2r2_vision_receiver"), converter()
   {
     std::string host;
     int port;
@@ -146,7 +171,7 @@ private:
     geometry.field_width = packet_field.field_width() * TO_METER;
     geometry.goal_width = packet_field.goal_width() * TO_METER;
     geometry.goal_depth = packet_field.goal_depth() * TO_METER;
-    geometry.boundary_width = int(packet_field.boundary_width() * TO_METER);
+    geometry.boundary_width = static_cast<int>(packet_field.boundary_width() * TO_METER);
 
     auto lines = packet_field.field_lines();
     for (auto line = lines.begin(); line != lines.end(); line++) {

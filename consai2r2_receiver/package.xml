@@ -13,7 +13,7 @@
   <depend>std_msgs</depend>
   <depend>consai2r2_msgs</depend>
   <depend>protobuf-dev</depend>
-  <depend>Boost</depend>
+  <depend>boost</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

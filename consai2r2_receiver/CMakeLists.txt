@@ -16,7 +16,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(consai2r2_msgs REQUIRED)
 find_package(Protobuf REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system)
 
 # Protobuf
 include_directories(
@@ -35,12 +35,12 @@ protobuf_generate_cpp(PROTO_CPP PROTO_H
 )
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
-add_executable(referee_receiver 
+add_executable(referee_receiver
   src/referee_receiver.cpp
   ${PROTO_CPP}
   ${PROTO_H}
 )
-add_executable(vision_receiver 
+add_executable(vision_receiver
   src/vision_receiver.cpp
   ${PROTO_CPP}
   ${PROTO_H}
