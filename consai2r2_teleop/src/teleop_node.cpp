@@ -23,7 +23,8 @@
 
 #include "consai2r2_teleop/joystick_component.hpp"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char * argv[])
+{
   rclcpp::init(argc, argv);
   rclcpp::executors::SingleThreadedExecutor exe;
   rclcpp::NodeOptions options;
