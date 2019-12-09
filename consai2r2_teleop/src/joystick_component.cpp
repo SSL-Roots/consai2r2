@@ -18,13 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "consai2r2_teleop/joystick_component.hpp"
 
 #include <chrono>
+#include <cmath>
 #include <cstdio>
 #include <memory>
 #include <string>
-#include <cmath>
+
+#include "consai2r2_teleop/joystick_component.hpp"
 
 using namespace std::chrono_literals;
 
@@ -32,13 +33,13 @@ using namespace std::chrono_literals;
 namespace joystick
 {
 JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
-  : Node("consai2r2_teleop", options)
+: Node("consai2r2_teleop", options)
 {
   RCLCPP_INFO(this->get_logger(), "hello world");
-  auto callback = 
+  auto callback =
     [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void
     {
-        publish_robot_commands(msg);
+      publish_robot_commands(msg);
     };
 
   pub_commands_ = create_publisher<consai2r2_msgs::msg::RobotCommands>("robot_commands", 10);
@@ -47,7 +48,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
 
 void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
-  // TODO: WE HAVE TO USE ROS_PARAM
+  // FIXME: WE HAVE TO USE ROS_PARAM
   const int BUTTON_SHUTDOWN_1 = 8;
   const int BUTTON_SHUTDOWN_2 = 8;
   const int BUTTON_MOVE_ENABLE = 4;
@@ -61,8 +62,7 @@ void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::Shar
 
   consai2r2_msgs::msg::RobotCommand command;
 
-  if(msg->buttons[BUTTON_MOVE_ENABLE])
-  {
+  if (msg->buttons[BUTTON_MOVE_ENABLE]) {
     command.vel_surge = msg->axes[AXIS_VEL_SURGE] * MAX_VEL_SURGE;
     command.vel_sway = msg->axes[AXIS_VEL_SWAY] * MAX_VEL_SWAY;
     command.vel_angular = msg->axes[AXIS_VEL_ANGULAR] * MAX_VEL_ANGULAR;
@@ -79,9 +79,8 @@ void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::Shar
 }
 
 
+}  // namespace joystick
 
-} // namespace joystick
-
-#include <rclcpp_components/register_node_macro.hpp>
+#include "rclcpp_components/register_node_macro.hpp"
 
 RCLCPP_COMPONENTS_REGISTER_NODE(joystick::JoystickComponent)

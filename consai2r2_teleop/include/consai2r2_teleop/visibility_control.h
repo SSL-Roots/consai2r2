@@ -14,8 +14,8 @@
 //
 // Ref: https://github.com/ros2/examples/blob/master/rclcpp/minimal_composition/include/minimal_composition/visibility.h
 
-#ifndef COMPOSITION__VISIBILITY_CONTROL_H_
-#define COMPOSITION__VISIBILITY_CONTROL_H_
+#ifndef CONSAI2R2_TELEOP__VISIBILITY_CONTROL_H_
+#define CONSAI2R2_TELEOP__VISIBILITY_CONTROL_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -57,4 +57,4 @@ extern "C"
 }
 #endif
 
-#endif  // COMPOSITION__VISIBILITY_CONTROL_H_
+#endif  // CONSAI2R2_TELEOP__VISIBILITY_CONTROL_H_
