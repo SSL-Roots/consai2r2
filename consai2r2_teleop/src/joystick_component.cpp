@@ -18,13 +18,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#include "consai2r2_teleop/joystick_component.hpp"
 
 #include <chrono>
+#include <cmath>
 #include <cstdio>
 #include <memory>
 #include <string>
-#include <cmath>
+
+#include "consai2r2_teleop/joystick_component.hpp"
 
 using namespace std::chrono_literals;
 
@@ -47,7 +48,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
 
 void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
-  // TODO: WE HAVE TO USE ROS_PARAM
+  // FIXME: WE HAVE TO USE ROS_PARAM
   const int BUTTON_SHUTDOWN_1 = 8;
   const int BUTTON_SHUTDOWN_2 = 8;
   const int BUTTON_MOVE_ENABLE = 4;
@@ -78,8 +79,8 @@ void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::Shar
 }
 
 
-} // namespace joystick
+}  // namespace joystick
 
-#include <rclcpp_components/register_node_macro.hpp>
+#include "rclcpp_components/register_node_macro.hpp"
 
 RCLCPP_COMPONENTS_REGISTER_NODE(joystick::JoystickComponent)
