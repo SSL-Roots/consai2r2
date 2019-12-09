@@ -58,13 +58,14 @@ public:
     sendto(sock, word.c_str(), word.length(), 0, (struct sockaddr *)&addr, sizeof(addr));
   }
 
-  ~simple_udp() { close(sock); }
+  ~simple_udp() {close(sock);}
 };
 
 class SimSender : public rclcpp::Node
 {
 public:
-  SimSender() : Node("consai2r2_sim_sender")
+  SimSender()
+  : Node("consai2r2_sim_sender")
   {
     std::string host;
     int port;
