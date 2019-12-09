@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(consai2_msgs)
+project(consai2r2_msgs)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)

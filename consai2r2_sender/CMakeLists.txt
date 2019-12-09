@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(consai2_sender)
-
+project(consai2r2_sender)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -15,10 +14,10 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(consai2_msgs REQUIRED)
+find_package(consai2r2_msgs REQUIRED)
+find_package(Protobuf REQUIRED)
 
 # Protobuf
-find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
 protobuf_generate_cpp(PROTO_CPP PROTO_H
   include/${PROJECT_NAME}/proto/grSim_Replacement.proto
@@ -27,7 +26,7 @@ protobuf_generate_cpp(PROTO_CPP PROTO_H
 )
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
-add_executable(sim_sender 
+add_executable(sim_sender
   src/sim_sender.cpp
   ${PROTO_CPP}
   ${PROTO_H}
@@ -36,14 +35,14 @@ ament_target_dependencies(
   sim_sender
   "rclcpp"
   "std_msgs"
-  "consai2_msgs"
+  "consai2r2_msgs"
 )
+target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES})
+
+
 install(TARGETS sim_sender
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
-
-target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES})
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
