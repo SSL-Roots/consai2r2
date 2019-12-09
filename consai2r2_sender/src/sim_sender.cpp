@@ -55,16 +55,18 @@ public:
   }
   void udp_send(std::string word)
   {
-    sendto(sock, word.c_str(), word.length(), 0, (struct sockaddr *)&addr, sizeof(addr));
+    sendto(sock, word.c_str(), word.length(), 0, (struct sockaddr *)&addr,
+      sizeof(addr));
   }
 
-  ~simple_udp() { close(sock); }
+  ~simple_udp() {close(sock);}
 };
 
 class SimSender : public rclcpp::Node
 {
 public:
-  SimSender() : Node("consai2r2_sim_sender")
+  SimSender()
+  : Node("consai2r2_sim_sender")
   {
     std::string host;
     int port;
@@ -75,14 +77,17 @@ public:
     this->get_parameter("grsim_addr", host);
     this->get_parameter("grsim_port", port);
 
-    sub_commands_ = this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
-      "robot_commands", 10, std::bind(&SimSender::send_commands, this, std::placeholders::_1));
+    sub_commands_ =
+      this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
+      "robot_commands", 10,
+      std::bind(&SimSender::send_commands, this, std::placeholders::_1));
 
     udp_ = std::make_shared<simple_udp>(host, port);
   }
 
 private:
-  void send_commands(const consai2r2_msgs::msg::RobotCommands::SharedPtr msg) const
+  void send_commands(
+    const consai2r2_msgs::msg::RobotCommands::SharedPtr msg) const
   {
     const double MAX_KICK_SPEED = 8.0;  // m/s
     grSim_Commands * packet_commands = new grSim_Commands();
@@ -91,7 +96,8 @@ private:
     packet_commands->set_isteamyellow(msg->is_yellow);
 
     for (auto command : msg->commands) {
-      grSim_Robot_Command * robot_command = packet_commands->add_robot_commands();
+      grSim_Robot_Command * robot_command =
+        packet_commands->add_robot_commands();
       robot_command->set_id(command.robot_id);
 
       // 走行速度
@@ -125,7 +131,8 @@ private:
     udp_->udp_send(output);
   }
 
-  rclcpp::Subscription<consai2r2_msgs::msg::RobotCommands>::SharedPtr sub_commands_;
+  rclcpp::Subscription<consai2r2_msgs::msg::RobotCommands>::SharedPtr
+    sub_commands_;
   std::shared_ptr<simple_udp> udp_;
 };
 
