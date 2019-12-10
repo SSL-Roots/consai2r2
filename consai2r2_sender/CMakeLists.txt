@@ -16,9 +16,14 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(consai2r2_msgs REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system)
 
 # Protobuf
-include_directories(${PROTOBUF_INCLUDE_DIRS})
+include_directories(
+  ${PROTOBUF_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+)
+
 protobuf_generate_cpp(PROTO_CPP PROTO_H
   include/${PROJECT_NAME}/proto/grSim_Replacement.proto
   include/${PROJECT_NAME}/proto/grSim_Commands.proto
@@ -37,7 +42,7 @@ ament_target_dependencies(
   "std_msgs"
   "consai2r2_msgs"
 )
-target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES})
+target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
 
 
 install(TARGETS sim_sender
