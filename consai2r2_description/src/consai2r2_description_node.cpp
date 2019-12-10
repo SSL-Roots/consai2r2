@@ -31,6 +31,7 @@ public:
     this->declare_parameter("our_side");
     this->declare_parameter("our_color");
   }
+
 private:
 };
 
