@@ -20,7 +20,6 @@ find_package(Boost REQUIRED COMPONENTS system)
 
 # Protobuf
 include_directories(
-  "include"
   ${PROTOBUF_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
 )
