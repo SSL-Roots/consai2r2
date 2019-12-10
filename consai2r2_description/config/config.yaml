@@ -1,19 +1,5 @@
 consai2r2_description:
   ros__parameters:
-    game:
-      max_id:           15
-      player_num:       8
-      our_side:         'left'
-      our_color:        'blue'
-      goalie_id:        0
-      vision_addr:      '224.5.23.2'
-      vision_port:      10006
-      referee_addr:     '224.5.23.1'
-      referee_port:     10003
-      grsim_addr:       '127.0.0.1'
-      grsim_port:       20011
-      sender_device:    '/dev/ttyUSB0'
-      sender_baudrate:  57600
-    geometry:
-      robot_radius:     0.09
-      ball_radius:      0.0215
+    max_id:           15
+    our_side:         'left'
+    our_color:        'blue'
