@@ -22,7 +22,7 @@
 #define CONSAI2R2_TELEOP__JOYSTICK_COMPONENT_HPP_
 
 #include "consai2r2_msgs/msg/robot_commands.hpp"
-#include "consai2r2_teleop/visibility_control.h"
+#include "class_loader/visibility_control.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/joy.hpp"
 
@@ -32,7 +32,7 @@ namespace joystick
 class JoystickComponent : public rclcpp::Node
 {
 public:
-  COMPOSITION_PUBLIC
+  CLASS_LOADER_PUBLIC
   explicit JoystickComponent(const rclcpp::NodeOptions & options);
 
 private:
