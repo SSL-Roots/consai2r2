@@ -25,13 +25,13 @@ include_directories(
 )
 
 protobuf_generate_cpp(PROTO_CPP PROTO_H
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_wrapper.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_geometry.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_detection.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_robot_status.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_refbox_log.proto
-  include/${PROJECT_NAME}/proto/referee.proto
-  include/${PROJECT_NAME}/proto/game_event.proto
+  src/proto/messages_robocup_ssl_wrapper.proto
+  src/proto/messages_robocup_ssl_geometry.proto
+  src/proto/messages_robocup_ssl_detection.proto
+  src/proto/messages_robocup_ssl_robot_status.proto
+  src/proto/messages_robocup_ssl_refbox_log.proto
+  src/proto/referee.proto
+  src/proto/game_event.proto
 )
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
