@@ -30,6 +30,11 @@ include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(referee_receiver
   src/referee_receiver.cpp
 )
+add_executable(vision_receiver
+  src/vision_receiver.cpp
+  ${PROTO_CPP}
+  ${PROTO_H}
+)
 ament_target_dependencies(
   referee_receiver
   "rclcpp"
@@ -37,14 +42,24 @@ ament_target_dependencies(
   "consai2r2_msgs"
   "consai2r2_protobuf"
 )
-target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES} ${consai2r2_protobuf_LIBRARIES})
-
+ament_target_dependencies(
+  vision_receiver
+  "rclcpp"
+  "std_msgs"
+  "consai2r2_msgs"
+  "consai2r2_protobuf"
+)
+target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(vision_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
 
 install(
   DIRECTORY include/
   DESTINATION include)
 
 install(TARGETS referee_receiver
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME})
+install(TARGETS vision_receiver
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 
