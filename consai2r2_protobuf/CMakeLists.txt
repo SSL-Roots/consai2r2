@@ -69,7 +69,7 @@ install(
   LIBRARY DESTINATION lib)
 
 install(FILES ${PROTO_PY}
-  DESTINATION "${PYTHON_INSTALL_DIR}/${PROJECT_NAME}")
+  DESTINATION "${PYTHON_INSTALL_DIR}")
 
 ament_export_include_directories(include)
 ament_export_libraries(consai2r2_protobuf)
