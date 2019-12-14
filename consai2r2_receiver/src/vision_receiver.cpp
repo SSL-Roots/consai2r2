@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "./messages_robocup_ssl_wrapper.pb.h"
+#include "consai2r2_protobuf/messages_robocup_ssl_wrapper.pb.h"
 #include "consai2r2_msgs/msg/vision_detections.hpp"
 #include "consai2r2_msgs/msg/vision_geometry.hpp"
 #include "rclcpp/rclcpp.hpp"
