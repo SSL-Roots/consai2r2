@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "./referee.pb.h"
+#include "consai2r2_protobuf/referee.pb.h"
 #include "consai2r2_msgs/msg/referee.hpp"
 #include "rclcpp/rclcpp.hpp"
 

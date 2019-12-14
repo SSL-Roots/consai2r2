@@ -15,21 +15,16 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(consai2r2_msgs REQUIRED)
+find_package(consai2r2_protobuf REQUIRED)
 find_package(Protobuf REQUIRED)
 
-# Protobuf
-include_directories(${PROTOBUF_INCLUDE_DIRS})
-protobuf_generate_cpp(PROTO_CPP PROTO_H
-  include/${PROJECT_NAME}/proto/grSim_Replacement.proto
-  include/${PROJECT_NAME}/proto/grSim_Commands.proto
-  include/${PROJECT_NAME}/proto/grSim_Packet.proto
-)
+include_directories(
+  include
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${consai2r2_protobuf_INCLUDE_DIRS})
 
-include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(sim_sender
   src/sim_sender.cpp
-  ${PROTO_CPP}
-  ${PROTO_H}
 )
 ament_target_dependencies(
   sim_sender
@@ -37,7 +32,7 @@ ament_target_dependencies(
   "std_msgs"
   "consai2r2_msgs"
 )
-target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES})
+target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES} ${consai2r2_protobuf_LIBRARIES})
 
 
 install(TARGETS sim_sender
