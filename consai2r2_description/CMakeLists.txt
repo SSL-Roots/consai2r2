@@ -13,6 +13,15 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(python_cmake_module REQUIRED)
+
+set(_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+
+if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE_DEBUG}")
+endif()
+
+ament_python_install_package(${PROJECT_NAME})
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(${PROJECT_NAME}_node
@@ -39,8 +48,6 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}/
 )
 
-
-
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -51,5 +58,7 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+set(PYTHON_EXECUTABLE "${_PYTHON_EXECUTABLE}")
 
 ament_package()
