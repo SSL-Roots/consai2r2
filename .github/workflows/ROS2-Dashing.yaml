@@ -43,8 +43,6 @@ jobs:
                   # Ref: https://index.ros.org/doc/ros2/Tutorials/Colcon-Tutorial/
                   sudo apt install python3-colcon-common-extensions
                   cd ~/ros2_ws
-                  colcon build --packages-select=consai2r2_protobuf
-                  source ~/ros2_ws/install/setup.bash
                   colcon build
                   source ~/ros2_ws/install/setup.bash
             - name: Test packages
