@@ -1,4 +1,3 @@
-# https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L54
 # Copyright 2018 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +14,11 @@
 
 from rcl_interfaces.msg import ParameterType
 from rcl_interfaces.srv import GetParameters
-import rclpy
-from rclpy.node import Node
 
+import rclpy
+
+
+# https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L54
 def get_parameters(node, parameter_names):
     # create client
     client = node.create_client(
@@ -38,8 +39,7 @@ def get_parameters(node, parameter_names):
     response = future.result()
     if response is None:
         e = future.exception()
-        raise RuntimeError(
-            "Failed to get parameters form node 'consai2r2_description'")
+        raise RuntimeError("Failed to get parameters form node 'consai2r2_description'")
 
     return_values = []
 
@@ -65,8 +65,7 @@ def get_parameters(node, parameter_names):
         elif pvalue.type == ParameterType.PARAMETER_NOT_SET:
             value = None
         else:
-            raise RuntimeError("Unknown parameter type '{pvalue.type}'" \
-                .format_map(locals()))
+            raise RuntimeError("Unknown parameter type '{pvalue.type}'".format_map(locals()))
         return_values.append(value)
-    
+
     return return_values
