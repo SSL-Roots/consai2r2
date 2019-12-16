@@ -14,8 +14,33 @@
 
 from rcl_interfaces.msg import ParameterType
 from rcl_interfaces.srv import GetParameters
+from rcl_interfaces.srv import ListParameters
 
 import rclpy
+
+
+# https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L174
+def list_parameters(node):
+    # create client
+    client = node.create_client(
+        ListParameters,
+        'consai2r2_description/list_parameters')
+
+    # call as soon as ready
+    ready = client.wait_for_service(timeout_sec=5.0)
+    if not ready:
+        raise RuntimeError('Wait for service timed out')
+
+    request = ListParameters.Request()
+    future = client.call_async(request)
+    rclpy.spin_until_future_complete(node, future)
+
+    # handle response
+    response = future.result()
+    if response is None:
+        raise RuntimeError("Failed to get the list of parameters'")
+
+    return response.result.names
 
 
 # https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L54
@@ -41,9 +66,9 @@ def get_parameters(node, parameter_names):
         e = future.exception()
         raise RuntimeError("Failed to get parameters form node 'consai2r2_description'")
 
-    return_values = []
+    return_values = {}
 
-    for pvalue in response.values:
+    for i, pvalue in enumerate(response.values):
         if pvalue.type == ParameterType.PARAMETER_BOOL:
             value = pvalue.bool_value
         elif pvalue.type == ParameterType.PARAMETER_INTEGER:
@@ -66,6 +91,6 @@ def get_parameters(node, parameter_names):
             value = None
         else:
             raise RuntimeError("Unknown parameter type '{pvalue.type}'".format_map(locals()))
-        return_values.append(value)
+        return_values[parameter_names[i]] = value
 
     return return_values

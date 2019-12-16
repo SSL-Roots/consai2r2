@@ -17,3 +17,14 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+
+import consai2r2_description.parameter
+
+
+class consai2r2_parameters():
+
+    def __init__(self, node):
+        param_names = consai2r2_description.parameter.list_parameters(node)
+        params = consai2r2_description.parameter.get_parameters(node, param_names)
+        for param_name, param_value in params.items():
+            setattr(self, param_name, param_value)

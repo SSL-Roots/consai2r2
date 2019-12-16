@@ -20,7 +20,7 @@
 
 import math
 
-import consai2r2_description.parameter
+from consai2r2_description import consai2r2_parameters
 from consai2r2_msgs.msg import BallInfo, DecodedReferee, Referee
 from geometry_msgs.msg import Pose2D
 import rclpy
@@ -46,8 +46,9 @@ class RefereeWrapper(Node):
     def __init__(self):
         super().__init__('consai2r2_referee_wrapper')
 
-        self._OUR_COLOR, self._OUR_SIDE = consai2r2_description.parameter.get_parameters(
-            self, ['our_color', 'our_side'])
+        common_params = consai2r2_parameters(self)
+        self._OUR_COLOR = common_params.our_color
+        self._OUR_SIDE = common_params.our_side
 
         self._sub_ball_info = self.create_subscription(
             BallInfo, 'consai2r2_vision_wrapper/ball_info', self._callback_ball_info, 1)

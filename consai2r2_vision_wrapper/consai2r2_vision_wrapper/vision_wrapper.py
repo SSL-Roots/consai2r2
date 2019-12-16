@@ -20,7 +20,7 @@
 
 import math
 
-import consai2r2_description.parameter
+from consai2r2_description import consai2r2_parameters
 
 from consai2r2_msgs.msg import BallInfo, RobotInfo, VisionDetections
 from geometry_msgs.msg import Pose2D
@@ -44,8 +44,9 @@ class VisionWrapper(Node):
         self.declare_parameter('publish_blue', True)
         self.declare_parameter('publish_yellow', True)
 
-        self._OUR_COLOR, self._MAX_ID = consai2r2_description.parameter.get_parameters(
-            self, ['our_color', 'max_id'])
+        common_params = consai2r2_parameters(self)
+        self._OUR_COLOR = common_params.our_color
+        self._MAX_ID = common_params.max_id
 
         self._PUBLISH_BALL = self.get_parameter('publish_ball').value
         self._PUBLISH_ROBOT['blue'] = self.get_parameter('publish_blue').value
