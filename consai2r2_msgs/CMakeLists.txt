@@ -13,16 +13,22 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(builtin_interfaces REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 set(msg_files
+  "msg/RefereeGameEvent.msg"
+  "msg/RefereeTeamInfo.msg"
+  "msg/Referee.msg"
   "msg/RobotCommand.msg"
   "msg/RobotCommands.msg"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
-  DEPENDENCIES std_msgs
+  DEPENDENCIES builtin_interfaces std_msgs geometry_msgs sensor_msgs
 )
 
 ament_export_dependencies(rosidl_default_runtime)
