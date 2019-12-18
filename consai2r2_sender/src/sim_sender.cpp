@@ -18,14 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-// for UDP communication
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
-
+#include <boost/asio.hpp>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -40,25 +33,28 @@
 
 using std::placeholders::_1;
 
-class simple_udp
+namespace asio = boost::asio;
+
+class UDPSender
 {
-  int sock;
-  struct sockaddr_in addr;
-
 public:
-  simple_udp(std::string address, int port)
+  UDPSender(const std::string & ip, const int port)
+  : socket_(io_service_, asio::ip::udp::endpoint(asio::ip::udp::v4(), 0))
   {
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(address.c_str());
-    addr.sin_port = htons(port);
-  }
-  void udp_send(std::string word)
-  {
-    sendto(sock, word.c_str(), word.length(), 0, (struct sockaddr *)&addr, sizeof(addr));
+    asio::ip::udp::resolver resolver(io_service_);
+    asio::ip::udp::resolver::query query(ip, std::to_string(port));
+    endpoint_ = *resolver.resolve(query);
   }
 
-  ~simple_udp() {close(sock);}
+  void send(const std::string & str)
+  {
+    socket_.send_to(asio::buffer(str), endpoint_);
+  }
+
+private:
+  asio::io_service io_service_;
+  asio::ip::udp::endpoint endpoint_;
+  asio::ip::udp::socket socket_;
 };
 
 class SimSender : public rclcpp::Node
@@ -79,7 +75,7 @@ public:
     sub_commands_ = this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
       "robot_commands", 10, std::bind(&SimSender::send_commands, this, std::placeholders::_1));
 
-    udp_ = std::make_shared<simple_udp>(host, port);
+    udp_sender_ = std::make_shared<UDPSender>(host, port);
   }
 
 private:
@@ -123,11 +119,11 @@ private:
 
     std::string output;
     packet.SerializeToString(&output);
-    udp_->udp_send(output);
+    udp_sender_->send(output);
   }
 
   rclcpp::Subscription<consai2r2_msgs::msg::RobotCommands>::SharedPtr sub_commands_;
-  std::shared_ptr<simple_udp> udp_;
+  std::shared_ptr<UDPSender> udp_sender_;
 };
 
 int main(int argc, char * argv[])
