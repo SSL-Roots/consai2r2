@@ -109,7 +109,7 @@ issue, pull request 大歓迎です。
 
 consai2r2はRoboCup SSLに参加している日本人チーム**Roots**が立ち上げました。
 
-Roots以外にもconsai2r2の開発に貢献しているメンバーがいます！[Controbutors](https://github.com/SSL-Roots/consai2r2/graphs/contributors)のページを見てください。
+Roots以外にもconsai2r2の開発に貢献しているメンバーがいます！[Contributors](https://github.com/SSL-Roots/consai2r2/graphs/contributors)のページを見てください。
 
 RoboCup SSLへの参加方法、ロボットに必要な機能、開発環境などは Rootsのホームページに記載してます。
 
