@@ -22,6 +22,13 @@ set(msg_files
   "msg/RefereeGameEvent.msg"
   "msg/RefereeTeamInfo.msg"
   "msg/Referee.msg"
+  "msg/FieldCircularArc.msg"
+  "msg/FieldLineSegment.msg"
+  "msg/VisionGeometry.msg"
+  "msg/DetectionBall.msg"
+  "msg/DetectionRobot.msg"
+  "msg/DetectionFrame.msg"
+  "msg/VisionDetections.msg"
   "msg/RobotCommand.msg"
   "msg/RobotCommands.msg"
 )

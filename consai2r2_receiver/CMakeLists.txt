@@ -40,20 +40,34 @@ add_executable(referee_receiver
   ${PROTO_CPP}
   ${PROTO_H}
 )
+add_executable(vision_receiver
+  src/vision_receiver.cpp
+  ${PROTO_CPP}
+  ${PROTO_H}
+)
 ament_target_dependencies(
   referee_receiver
   "rclcpp"
   "std_msgs"
   "consai2r2_msgs"
 )
+ament_target_dependencies(
+  vision_receiver
+  "rclcpp"
+  "std_msgs"
+  "consai2r2_msgs"
+)
 target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
-
+target_link_libraries(vision_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
 
 install(
   DIRECTORY include/
   DESTINATION include)
 
 install(TARGETS referee_receiver
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME})
+install(TARGETS vision_receiver
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 
