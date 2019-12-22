@@ -94,6 +94,7 @@ private:
     detection_robot.robot_id = raw_robot.robot_id();
     detection_robot.pose.x = raw_robot.x() * TO_METER;
     detection_robot.pose.y = raw_robot.y() * TO_METER;
+    detection_robot.pose.theta = raw_robot.orientation();
 
     return detection_robot;
   }
