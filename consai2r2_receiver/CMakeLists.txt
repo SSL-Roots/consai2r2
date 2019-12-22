@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(consai2r2_sender)
+project(consai2r2_receiver)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -25,27 +25,49 @@ include_directories(
 )
 
 protobuf_generate_cpp(PROTO_CPP PROTO_H
-  include/${PROJECT_NAME}/proto/grSim_Replacement.proto
-  include/${PROJECT_NAME}/proto/grSim_Commands.proto
-  include/${PROJECT_NAME}/proto/grSim_Packet.proto
+  include/${PROJECT_NAME}/proto/messages_robocup_ssl_wrapper.proto
+  include/${PROJECT_NAME}/proto/messages_robocup_ssl_geometry.proto
+  include/${PROJECT_NAME}/proto/messages_robocup_ssl_detection.proto
+  include/${PROJECT_NAME}/proto/messages_robocup_ssl_robot_status.proto
+  include/${PROJECT_NAME}/proto/messages_robocup_ssl_refbox_log.proto
+  include/${PROJECT_NAME}/proto/referee.proto
+  include/${PROJECT_NAME}/proto/game_event.proto
 )
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
-add_executable(sim_sender
-  src/sim_sender.cpp
+add_executable(referee_receiver
+  src/referee_receiver.cpp
+  ${PROTO_CPP}
+  ${PROTO_H}
+)
+add_executable(vision_receiver
+  src/vision_receiver.cpp
   ${PROTO_CPP}
   ${PROTO_H}
 )
 ament_target_dependencies(
-  sim_sender
+  referee_receiver
   "rclcpp"
   "std_msgs"
   "consai2r2_msgs"
 )
-target_link_libraries(sim_sender ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
+ament_target_dependencies(
+  vision_receiver
+  "rclcpp"
+  "std_msgs"
+  "consai2r2_msgs"
+)
+target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(vision_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
 
+install(
+  DIRECTORY include/
+  DESTINATION include)
 
-install(TARGETS sim_sender
+install(TARGETS referee_receiver
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME})
+install(TARGETS vision_receiver
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 
