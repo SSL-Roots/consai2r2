@@ -38,7 +38,7 @@ public:
   {
     asio::ip::address addr = asio::ip::address::from_string(ip);
     if (!addr.is_multicast()) {
-      throw std::runtime_error("excpeted multicast address");
+      throw std::runtime_error("expected multicast address");
     }
 
     socket.set_option(asio::socket_base::reuse_address(true));
