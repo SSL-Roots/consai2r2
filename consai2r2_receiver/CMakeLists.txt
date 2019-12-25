@@ -15,6 +15,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(consai2r2_msgs REQUIRED)
+find_package(consai2r2_protobuf REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 
@@ -22,23 +23,12 @@ find_package(Boost REQUIRED COMPONENTS system)
 include_directories(
   ${PROTOBUF_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
-)
-
-protobuf_generate_cpp(PROTO_CPP PROTO_H
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_wrapper.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_geometry.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_detection.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_robot_status.proto
-  include/${PROJECT_NAME}/proto/messages_robocup_ssl_refbox_log.proto
-  include/${PROJECT_NAME}/proto/referee.proto
-  include/${PROJECT_NAME}/proto/game_event.proto
+  ${consai2r2_protobuf_INCLUDE_DIRS}
 )
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(referee_receiver
   src/referee_receiver.cpp
-  ${PROTO_CPP}
-  ${PROTO_H}
 )
 add_executable(vision_receiver
   src/vision_receiver.cpp
@@ -50,12 +40,14 @@ ament_target_dependencies(
   "rclcpp"
   "std_msgs"
   "consai2r2_msgs"
+  "consai2r2_protobuf"
 )
 ament_target_dependencies(
   vision_receiver
   "rclcpp"
   "std_msgs"
   "consai2r2_msgs"
+  "consai2r2_protobuf"
 )
 target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(vision_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})

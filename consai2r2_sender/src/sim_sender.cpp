@@ -27,9 +27,10 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
-#include "grSim_Commands.pb.h"
-#include "grSim_Packet.pb.h"
-#include "grSim_Replacement.pb.h"
+#include "consai2r2_protobuf/grSim_Commands.pb.h"
+#include "consai2r2_protobuf/grSim_Packet.pb.h"
+#include "consai2r2_protobuf/grSim_Replacement.pb.h"
+
 
 using std::placeholders::_1;
 
