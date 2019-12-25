@@ -18,19 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch_ros.actions import Node
+import consai2r2_description.parameter
 
 
-def generate_launch_description():
-    config_path = os.path.join(
-        get_package_share_directory('consai2r2_description'), 'config', 'config.yaml')
+class consai2r2_parameters():
 
-    return LaunchDescription([
-        Node(
-            package='consai2r2_description', node_executable='consai2r2_description_node',
-            output='screen', parameters=[config_path])
-    ])
+    def __init__(self, node):
+        param_names = consai2r2_description.parameter.list_parameters(node)
+        params = consai2r2_description.parameter.get_parameters(node, param_names)
+        for param_name, param_value in params.items():
+            setattr(self, param_name, param_value)

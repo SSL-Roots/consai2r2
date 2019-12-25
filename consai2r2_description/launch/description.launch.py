@@ -32,5 +32,17 @@ def generate_launch_description():
     return LaunchDescription([
         Node(
             package='consai2r2_description', node_executable='consai2r2_description_node',
-            output='screen', parameters=[config_path])
+            output='screen', parameters=[config_path]),
+        Node(
+            package='consai2r2_receiver', node_executable='referee_receiver',
+            output='screen', parameters=[config_path]),
+        Node(
+            package='consai2r2_receiver', node_executable='vision_receiver',
+            output='screen', parameters=[config_path]),
+        Node(
+            package='consai2r2_vision_wrapper', node_executable='vision_wrapper',
+            output='screen', parameters=[config_path]),
+        Node(
+            package='consai2r2_referee_wrapper', node_executable='referee_wrapper',
+            output='screen', parameters=[config_path]),
     ])
