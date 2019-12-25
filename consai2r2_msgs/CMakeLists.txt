@@ -29,6 +29,8 @@ set(msg_files
   "msg/DetectionRobot.msg"
   "msg/DetectionFrame.msg"
   "msg/VisionDetections.msg"
+  "msg/RobotInfo.msg"
+  "msg/BallInfo.msg"
   "msg/RobotCommand.msg"
   "msg/RobotCommands.msg"
 )
