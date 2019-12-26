@@ -31,6 +31,8 @@ set(msg_files
   "msg/VisionDetections.msg"
   "msg/RobotInfo.msg"
   "msg/BallInfo.msg"
+  "msg/DecodedReferee.msg"
+  "msg/ReplaceBall.msg"
   "msg/RobotCommand.msg"
   "msg/RobotCommands.msg"
 )
