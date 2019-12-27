@@ -31,6 +31,7 @@ set(msg_files
   "msg/VisionDetections.msg"
   "msg/RobotCommand.msg"
   "msg/RobotCommands.msg"
+  "msg/RobotStatus.msg"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
