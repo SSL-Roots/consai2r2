@@ -19,7 +19,6 @@ find_package(consai2r2_protobuf REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 
-# Protobuf
 include_directories(
   ${PROTOBUF_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
@@ -27,13 +26,12 @@ include_directories(
 )
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
+
 add_executable(referee_receiver
   src/referee_receiver.cpp
 )
 add_executable(vision_receiver
   src/vision_receiver.cpp
-  ${PROTO_CPP}
-  ${PROTO_H}
 )
 ament_target_dependencies(
   referee_receiver
@@ -49,8 +47,8 @@ ament_target_dependencies(
   "consai2r2_msgs"
   "consai2r2_protobuf"
 )
-target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
-target_link_libraries(vision_receiver ${PROTOBUF_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${consai2r2_protobuf_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(vision_receiver ${PROTOBUF_LIBRARIES} ${consai2r2_protobuf_LIBRARIES} ${Boost_LIBRARIES})
 
 install(
   DIRECTORY include/
