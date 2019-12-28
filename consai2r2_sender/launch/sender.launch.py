@@ -21,14 +21,10 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
-
-    # sim = LaunchConfiguration('sim')  # TODO : 現在未使用 シミュレータの切り替え用
-
     start_sender_cmd = Node(
         package='consai2r2_sender', node_executable='sim_sender',
         output='screen',
