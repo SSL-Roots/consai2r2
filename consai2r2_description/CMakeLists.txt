@@ -46,6 +46,14 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}/
 )
 
+install(DIRECTORY
+  include
+)
+
+ament_export_include_directories(include)
+ament_export_dependencies(ament_cmake)
+ament_export_dependencies(python_cmake_module)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
