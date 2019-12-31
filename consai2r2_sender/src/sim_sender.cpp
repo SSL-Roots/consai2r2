@@ -32,6 +32,7 @@
 #include "grSim_Replacement.pb.h"
 
 using std::placeholders::_1;
+using namespace std::chrono_literals;
 
 namespace asio = boost::asio;
 
@@ -69,8 +70,17 @@ public:
     this->declare_parameter("grsim_addr", "127.0.0.1");
     this->declare_parameter("grsim_port", 20011);
 
-    this->get_parameter("grsim_addr", host);
-    this->get_parameter("grsim_port", port);
+    auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this);
+    while (!parameters_client->wait_for_service(1s)) {
+      if (!rclcpp::ok()) {
+        RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+        rclcpp::shutdown();
+      }
+      RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
+    }
+
+    parameters_client->get_parameter("grsim_addr", host);
+    parameters_client->get_parameter("grsim_port", port);
 
     sub_commands_ = this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
       "robot_commands", 10, std::bind(&SimSender::send_commands, this, std::placeholders::_1));
