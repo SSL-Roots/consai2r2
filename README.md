@@ -103,7 +103,7 @@ GitHubのProjects機能で開発方針に合わせたタスク管理をしてい
 
 issue, pull request 大歓迎です。
 
-[CONTIRIBUTING.md](./CONTRIBUTING.md)を見てくれると嬉しいです。
+[CONTRIBUTING.md](./CONTRIBUTING.md)を見てくれると嬉しいです。
 
 # Author & Contributors
 
