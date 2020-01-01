@@ -62,7 +62,7 @@ class SimSender : public rclcpp::Node
 {
 public:
   SimSender()
-  : Node("sim_sender_node")
+  : Node("sim_sender")
   {
     this->declare_parameter("grsim_addr", "127.0.0.1");
     this->declare_parameter("grsim_port", 20011);

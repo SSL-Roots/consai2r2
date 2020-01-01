@@ -18,6 +18,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import os
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
@@ -49,7 +51,9 @@ def generate_launch_description():
 
     start_sender_cmd = Node(
         package='consai2r2_sender', node_executable='sim_sender',
-        output='screen'
+        output='screen',
+        parameters=[os.path.join(get_package_share_directory(
+            'consai2r2_sender'), 'config', 'grsim.yaml')]
     )
 
     ld = LaunchDescription()
