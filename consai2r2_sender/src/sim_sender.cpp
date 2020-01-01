@@ -62,25 +62,12 @@ class SimSender : public rclcpp::Node
 {
 public:
   SimSender()
-  : Node("consai2r2_sim_sender")
+  : Node("sim_sender_node")
   {
-    std::string host;
-    int port;
-
     this->declare_parameter("grsim_addr", "127.0.0.1");
     this->declare_parameter("grsim_port", 20011);
-
-    auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this);
-    while (!parameters_client->wait_for_service(1s)) {
-      if (!rclcpp::ok()) {
-        RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
-        rclcpp::shutdown();
-      }
-      RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
-    }
-
-    parameters_client->get_parameter("grsim_addr", host);
-    parameters_client->get_parameter("grsim_port", port);
+    auto host = this->get_parameter("grsim_addr").as_string();
+    auto port = this->get_parameter("grsim_port").as_int();
 
     sub_commands_ = this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
       "robot_commands", 10, std::bind(&SimSender::send_commands, this, std::placeholders::_1));
