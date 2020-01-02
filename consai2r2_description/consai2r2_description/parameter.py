@@ -20,14 +20,14 @@ import rclpy
 
 
 # https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L174
-def list_parameters(node):
+def list_parameters(node, timeout_sec=10.0):
     # create client
     client = node.create_client(
         ListParameters,
         'consai2r2_description/list_parameters')
 
     # call as soon as ready
-    ready = client.wait_for_service(timeout_sec=5.0)
+    ready = client.wait_for_service(timeout_sec)
     if not ready:
         raise RuntimeError('Wait for service timed out')
 
@@ -44,14 +44,14 @@ def list_parameters(node):
 
 
 # https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L54
-def get_parameters(node, parameter_names):
+def get_parameters(node, parameter_names, timeout_sec=10.0):
     # create client
     client = node.create_client(
         GetParameters,
         'consai2r2_description/get_parameters')
 
     # call as soon as ready
-    ready = client.wait_for_service(timeout_sec=5.0)
+    ready = client.wait_for_service(timeout_sec)
     if not ready:
         raise RuntimeError('Wait for service timed out')
 

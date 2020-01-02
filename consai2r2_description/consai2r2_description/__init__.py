@@ -23,8 +23,8 @@ import consai2r2_description.parameter
 
 class consai2r2_parameters():
 
-    def __init__(self, node):
-        param_names = consai2r2_description.parameter.list_parameters(node)
-        params = consai2r2_description.parameter.get_parameters(node, param_names)
+    def __init__(self, node, timeout_sec=10.0):
+        param_names = consai2r2_description.parameter.list_parameters(node, timeout_sec)
+        params = consai2r2_description.parameter.get_parameters(node, param_names, timeout_sec)
         for param_name, param_value in params.items():
             setattr(self, param_name, param_value)
