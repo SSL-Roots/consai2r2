@@ -99,11 +99,11 @@ GitHubのProjects機能で開発方針に合わせたタスク管理をしてい
 - [2nd step - SSL Game Example](https://github.com/SSL-Roots/consai2r2/projects/3)
 - [3rd step - use ROS2 effectively](https://github.com/SSL-Roots/consai2r2/projects/2)
 
-# Controbution
+# Contribution
 
 issue, pull request 大歓迎です。
 
-[CONTORIBUTING.md](./CONTRIBUTING.md)を見てくれると嬉しいです。
+[CONTRIBUTING.md](./CONTRIBUTING.md)を見てくれると嬉しいです。
 
 # Author & Contributors
 
