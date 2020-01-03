@@ -63,14 +63,10 @@ public:
   SimSender()
   : Node("consai2r2_sim_sender")
   {
-    std::string host;
-    int port;
-
     this->declare_parameter("grsim_addr", "127.0.0.1");
     this->declare_parameter("grsim_port", 20011);
-
-    this->get_parameter("grsim_addr", host);
-    this->get_parameter("grsim_port", port);
+    auto host = this->get_parameter("grsim_addr").as_string();
+    auto port = this->get_parameter("grsim_port").as_int();
 
     sub_commands_ = this->create_subscription<consai2r2_msgs::msg::RobotCommands>(
       "robot_commands", 10, std::bind(&SimSender::send_commands, this, std::placeholders::_1));
