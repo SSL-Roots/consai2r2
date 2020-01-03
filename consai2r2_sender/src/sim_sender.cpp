@@ -32,7 +32,6 @@
 #include "grSim_Replacement.pb.h"
 
 using std::placeholders::_1;
-using namespace std::chrono_literals;
 
 namespace asio = boost::asio;
 

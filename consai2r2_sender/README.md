@@ -1,4 +1,4 @@
-# consai2_sender
+# consai2r2_sender
 
 ロボット(grSim)へ動作司令を送信するパッケージです。
 <!-- ロボット(実機/grSim)へ動作司令を送信するパッケージです。 -->
@@ -48,6 +48,6 @@ roslaunch consai2_sender sender.launch sim:=true
 -->
 
 ## 参考ページ
-### Google proto files -->
+### Google proto files
 - grSim
   - https://github.com/RoboCup-SSL/grSim/tree/master/src/proto
