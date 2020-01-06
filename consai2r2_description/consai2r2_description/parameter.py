@@ -19,7 +19,7 @@ from rcl_interfaces.srv import ListParameters
 import rclpy
 
 
-# https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L174
+# https://github.com/ros2/ros2cli/blob/780923c046f8e537e884d18bef33a2338f2d409c/ros2param/ros2param/api/__init__.py#L174
 def list_parameters(node, timeout_sec=10.0):
     # create client
     client = node.create_client(
@@ -43,7 +43,7 @@ def list_parameters(node, timeout_sec=10.0):
     return response.result.names
 
 
-# https://github.com/ros2/ros2cli/blob/master/ros2param/ros2param/api/__init__.py#L54
+# https://github.com/ros2/ros2cli/blob/780923c046f8e537e884d18bef33a2338f2d409c/ros2param/ros2param/api/__init__.py#L54
 def get_parameters(node, parameter_names, timeout_sec=10.0):
     # create client
     client = node.create_client(
