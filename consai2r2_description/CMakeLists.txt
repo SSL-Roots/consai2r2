@@ -14,6 +14,12 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
+set(_PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE}")
+
+if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(PYTHON_EXECUTABLE "${PYTHON_EXECUTABLE_DEBUG}")
+endif()
+
 ament_python_install_package(${PROJECT_NAME})
 
 include_directories(include ${CMAKE_CURRENT_BINARY_DIR})
