@@ -30,14 +30,21 @@
 
 using std::placeholders::_1;
 
-struct Consai2r2Parameters
+
+namespace consai2r2
+{
+
+namespace description
+{
+
+struct Parameters
 {
 public:
   int max_id;
   std::string our_side;
   std::string our_color;
 
-  Consai2r2Parameters()
+  Parameters()
   {
     max_id = 15;
     our_side = "left";
@@ -45,15 +52,15 @@ public:
   }
 };
 
-class Consai2r2ParametersClient
+class ParametersClient
 {
 public:
-  explicit Consai2r2ParametersClient(rclcpp::Node * node)
+  explicit ParametersClient(rclcpp::Node * node)
   : client(node, "consai2r2_description")
   {
   }
 
-  void get_parameters(Consai2r2Parameters * consai2r2_parameters)
+  void get_parameters(consai2r2::description::Parameters * consai2r2_parameters)
   {
     if (!client.wait_for_service(std::chrono::seconds(5))) {
       throw std::runtime_error("Wait for service timed out");
@@ -69,5 +76,9 @@ public:
 private:
   rclcpp::SyncParametersClient client;
 };
+
+}  // namespace description
+
+}  // namespace consai2r2
 
 #endif  // CONSAI2R2_DESCRIPTION__PARAMETERS_HPP_
