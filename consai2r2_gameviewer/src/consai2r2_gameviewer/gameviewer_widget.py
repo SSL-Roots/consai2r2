@@ -20,17 +20,38 @@
 
 import os
 
-from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch_ros.actions import Node
+from ament_index_python.resources import get_resource
+
+from python_qt_binding import loadUi
+from python_qt_binding.QtWidgets import QWidget
+from python_qt_binding.QtGui import QPainter
+from python_qt_binding.QtCore import Qt
+
+class GameViewerWidget(QWidget):
+
+    """
+    Primary widget for the consai2r2_gameviewer plugin.
+    """
+
+    def __init__(self):
+        super(GameViewerWidget, self).__init__()
+
+        pkg_name = 'consai2r2_gameviewer'
+        _, package_path = get_resource('packages', pkg_name)
+        ui_file = os.path.join(
+            package_path, 'share', pkg_name, 'resource', 'gameviewer_widget.ui')
+        loadUi(ui_file, self)
+
+        self.setObjectName('GameViewerWidget')
 
 
-def generate_launch_description():
-    config_path = os.path.join(
-        get_package_share_directory('consai2r2_description'), 'config', 'config.yaml')
+    def paintEvent(self, event):
+        painter = QPainter(self)
 
-    return LaunchDescription([
-        Node(
-            package='consai2r2_description', node_executable='consai2r2_description_node',
-            output='screen', parameters=[config_path])
-    ])
+        # Hello world
+        painter.setBrush(Qt.green)
+        painter.setPen(Qt.black)
+        painter.drawRect(self.rect())
+
+        painter.drawText(self.rect().width()*0.5, self.rect().height()*0.5, "Hello world!")
+
