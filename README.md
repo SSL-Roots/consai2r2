@@ -62,7 +62,7 @@ cd ~/ros2_ws/src
 git clone https://github.com/SSL-Roots/consai2r2
 
 # 依存関係のインストール
-# 事前にrosdep install, update を実行すること
+# 事前にrosdep init, update を実行すること
 rosdep install -r -y --from-paths . --ignore-src
 
 # consai2r2のビルド
