@@ -12,6 +12,7 @@
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
   <depend>consai2r2_msgs</depend>
+  <depend>consai2r2_protobuf</depend>
   <depend>protobuf-dev</depend>
   <depend>boost</depend>
 

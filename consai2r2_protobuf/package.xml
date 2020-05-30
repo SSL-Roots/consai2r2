@@ -1,20 +1,15 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>consai2r2_receiver</name>
+  <name>consai2r2_protobuf</name>
   <version>0.0.0</version>
-  <description>Receive messages from SSL-Vision, SSL-Referee and grSim</description>
+  <description>Protobuf package for CON-SAI2</description>
   <maintainer email="macakasit@gmail.com">akshota</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>rclcpp</depend>
-  <depend>std_msgs</depend>
-  <depend>consai2r2_msgs</depend>
-  <depend>consai2r2_protobuf</depend>
   <depend>protobuf-dev</depend>
-  <depend>boost</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
