@@ -35,7 +35,20 @@ namespace joystick
 JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
 : Node("consai2r2_teleop", options)
 {
-  RCLCPP_INFO(this->get_logger(), "hello world");
+  this->declare_parameter("button_shutdown_1", 8);
+  this->declare_parameter("button_shutdown_2", 9);
+  this->declare_parameter("button_move_enable", 4);
+  this->declare_parameter("axis_vel_surge", 1);
+  this->declare_parameter("axis_vel_sway", 0);
+  this->declare_parameter("axis_vel_angular", 2);
+
+  button_shutdown_1_ = this->get_parameter("button_shutdown_1").get_value<int>();
+  button_shutdown_2_ = this->get_parameter("button_shutdown_2").get_value<int>();
+  button_move_enable_ = this->get_parameter("button_move_enable").get_value<int>();
+  axis_vel_surge_ = this->get_parameter("axis_vel_surge").get_value<int>();
+  axis_vel_sway_ = this->get_parameter("axis_vel_sway").get_value<int>();
+  axis_vel_angular_ = this->get_parameter("axis_vel_angular").get_value<int>();
+
   auto callback =
     [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void
     {
@@ -49,23 +62,16 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
 void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
   // FIXME: WE HAVE TO USE ROS_PARAM
-  const int BUTTON_SHUTDOWN_1 = 8;
-  const int BUTTON_SHUTDOWN_2 = 8;
-  const int BUTTON_MOVE_ENABLE = 4;
-  const int AXIS_VEL_SURGE = 1;
-  const int AXIS_VEL_SWAY = 0;
-  const int AXIS_VEL_ANGULAR = 2;
-
   const double MAX_VEL_SURGE = 1.0;
   const double MAX_VEL_SWAY = 1.0;
   const double MAX_VEL_ANGULAR = M_PI;
 
   consai2r2_msgs::msg::RobotCommand command;
 
-  if (msg->buttons[BUTTON_MOVE_ENABLE]) {
-    command.vel_surge = msg->axes[AXIS_VEL_SURGE] * MAX_VEL_SURGE;
-    command.vel_sway = msg->axes[AXIS_VEL_SWAY] * MAX_VEL_SWAY;
-    command.vel_angular = msg->axes[AXIS_VEL_ANGULAR] * MAX_VEL_ANGULAR;
+  if (msg->buttons[button_move_enable_]) {
+    command.vel_surge = msg->axes[axis_vel_surge_] * MAX_VEL_SURGE;
+    command.vel_sway = msg->axes[axis_vel_sway_] * MAX_VEL_SWAY;
+    command.vel_angular = msg->axes[axis_vel_angular_] * MAX_VEL_ANGULAR;
   }
 
   command.robot_id = 0;

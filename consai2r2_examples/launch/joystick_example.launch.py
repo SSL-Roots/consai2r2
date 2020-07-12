@@ -23,6 +23,9 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.actions import LogInfo
+from launch.actions import OpaqueFunction
+from launch.actions import SetLaunchConfiguration
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -39,6 +42,23 @@ def generate_launch_description():
         description='joystick device file'
     )
 
+    declare_joyconfig = DeclareLaunchArgument(
+        'joyconfig', default_value='f710',
+        description='Keyconfig of joystick controllers: {f710, dualshock3}'
+    )
+
+    def func_get_joyconfig_filename(context):
+        param_file = os.path.join(
+            get_package_share_directory('consai2r2_teleop'),
+            'config',
+            'joy_' + context.launch_configurations['joyconfig'] + '.yaml')
+
+        if os.path.exists(param_file):
+            return [SetLaunchConfiguration('joyconfig_filename', param_file)]
+        else:
+            return [LogInfo(msg=param_file + ' is not exist.')]
+    get_joyconfig_filename = OpaqueFunction(function=func_get_joyconfig_filename)
+
     start_joy_node_cmd = Node(
         package='joy', node_executable='joy_node',
         output='screen',
@@ -47,7 +67,8 @@ def generate_launch_description():
 
     start_teleop_node_cmd = Node(
         package='consai2r2_teleop', node_executable='teleop_node',
-        output='screen'
+        output='screen',
+        parameters=[LaunchConfiguration('joyconfig_filename')]
     )
 
     start_sender_cmd = Node(
@@ -60,6 +81,10 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     ld.add_action(declare_dev_cmd)
+    ld.add_action(declare_joyconfig)
+
+    ld.add_action(get_joyconfig_filename)
+
     ld.add_action(start_joy_node_cmd)
     ld.add_action(start_teleop_node_cmd)
     ld.add_action(start_sender_cmd)

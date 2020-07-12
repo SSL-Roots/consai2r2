@@ -36,6 +36,13 @@ public:
   explicit JoystickComponent(const rclcpp::NodeOptions & options);
 
 private:
+  int button_shutdown_1_;
+  int button_shutdown_2_;
+  int button_move_enable_;
+  int axis_vel_sway_;
+  int axis_vel_surge_;
+  int axis_vel_angular_;
+
   rclcpp::Publisher<consai2r2_msgs::msg::RobotCommands>::SharedPtr pub_commands_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
 
