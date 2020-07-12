@@ -1,4 +1,5 @@
-![Workflow Status](https://github.com/SSL-Roots/consai2r2/workflows/ROS2-Dashing/badge.svg)
+[![industrial_ci](https://github.com/rt-net/consai2r2/workflows/industrial_ci/badge.svg?branch=master)](https://github.com/rt-net/consai2r2/actions?query=workflow%3Aindustrial_ci+branch%3Amaster)
+
 
 # CON-SAI2 R2
 
