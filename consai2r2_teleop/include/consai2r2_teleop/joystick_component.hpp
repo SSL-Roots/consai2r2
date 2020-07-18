@@ -36,6 +36,14 @@ public:
   explicit JoystickComponent(const rclcpp::NodeOptions & options);
 
 private:
+  bool has_analog_d_pad_;
+  int d_pad_up_;
+  int d_pad_down_;
+  int d_pad_left_;
+  int d_pad_right_;
+  bool d_pad_up_is_positive_;
+  bool d_pad_right_is_positive_;
+
   int button_shutdown_1_;
   int button_shutdown_2_;
   int button_move_enable_;
@@ -43,7 +51,8 @@ private:
   int axis_vel_sway_;
   int axis_vel_surge_;
   int axis_vel_angular_;
-  int axis_color_change_;
+
+  std::string d_pad_change_color_;
 
   bool is_yellow_;
   bool has_changed_team_color_;
@@ -51,6 +60,13 @@ private:
   rclcpp::Publisher<consai2r2_msgs::msg::RobotCommands>::SharedPtr pub_commands_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
 
+  bool d_pad_pressed(const sensor_msgs::msg::Joy::SharedPtr msg,
+     const int target_pad, const bool positive_on);
+  bool d_pad_up(const sensor_msgs::msg::Joy::SharedPtr msg);
+  bool d_pad_down(const sensor_msgs::msg::Joy::SharedPtr msg);
+  bool d_pad_left(const sensor_msgs::msg::Joy::SharedPtr msg);
+  bool d_pad_right(const sensor_msgs::msg::Joy::SharedPtr msg);
+  bool d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const std::string target);
   void publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg);
   void shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
   void change_team_color_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
