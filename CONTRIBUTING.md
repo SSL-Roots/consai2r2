@@ -56,7 +56,8 @@ $ ament_uncrustify --reformat consai2r2_teleop/src/joystick_component.cpp
 `consai2r2`のホームディレクトリには[clang-formatの設定ファイル](./.clang-format)を用意しています。
 clang-formatコマンドや、エディタのフォーマッタ設定等に活用してください。
 
-注意：`.clang-formatファイルを使用した場合でもcolcon testに失敗する場合があります`
+`.clang-format`ファイルを使用しても`colcon test`に失敗する場合があります。
+**[GitHub Actions](https://github.com/SSL-Roots/consai2r2/actions)でのテストが通るように修正してください。**
 
 
 ## その他
