@@ -47,6 +47,7 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
 
   void publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
 };
 
 }  // namespace joystick

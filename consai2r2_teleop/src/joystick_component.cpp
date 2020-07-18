@@ -52,6 +52,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   auto callback =
     [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void
     {
+      shutdown_via_joy(msg);
       publish_robot_commands(msg);
     };
 
@@ -84,6 +85,13 @@ void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::Shar
   pub_commands_->publish(robot_commands);
 }
 
+void JoystickComponent::shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+  if (msg->buttons[button_shutdown_1_] && msg->buttons[button_shutdown_2_]){
+    RCLCPP_INFO(this->get_logger(), "Shutdown.");
+    rclcpp::shutdown();
+  }
+}
 
 }  // namespace joystick
 
