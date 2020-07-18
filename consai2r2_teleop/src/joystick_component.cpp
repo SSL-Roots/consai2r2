@@ -18,7 +18,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 #include <chrono>
 #include <cmath>
 #include <cstdio>
@@ -28,7 +27,6 @@
 #include "consai2r2_teleop/joystick_component.hpp"
 
 using namespace std::chrono_literals;
-
 
 namespace joystick
 {
@@ -74,9 +72,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   is_yellow_ = false;
   has_changed_team_color_ = false;
 
-  auto callback =
-    [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void
-    {
+  auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
       shutdown_via_joy(msg);
       change_team_color_via_joy(msg);
       publish_robot_commands(msg);
@@ -86,16 +82,17 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   sub_joy_ = create_subscription<sensor_msgs::msg::Joy>("joy", 10, callback);
 }
 
-bool JoystickComponent::d_pad_pressed(const sensor_msgs::msg::Joy::SharedPtr msg, const int target_pad, const bool positive_on)
+bool JoystickComponent::d_pad_pressed(
+  const sensor_msgs::msg::Joy::SharedPtr msg, const int target_pad, const bool positive_on)
 {
   const double THRESHOLD = 0.5;
-  if (has_analog_d_pad_){
-    if (positive_on){
+  if (has_analog_d_pad_) {
+    if (positive_on) {
       return msg->axes[target_pad] > THRESHOLD;
-    }else{
+    } else {
       return msg->axes[target_pad] < -THRESHOLD;
     }
-  }else{
+  } else {
     return msg->buttons[target_pad];
   }
 }
@@ -122,15 +119,15 @@ bool JoystickComponent::d_pad_right(const sensor_msgs::msg::Joy::SharedPtr msg)
 
 bool JoystickComponent::d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const std::string target)
 {
-  if(target == "up"){
+  if (target == "up") {
     return d_pad_up(msg);
-  }else if (target == "down"){
+  } else if (target == "down") {
     return d_pad_down(msg);
-  }else if (target == "right"){
+  } else if (target == "right") {
     return d_pad_right(msg);
-  }else if (target == "left"){
+  } else if (target == "left") {
     return d_pad_left(msg);
-  }else{
+  } else {
     return false;
   }
 }
@@ -170,21 +167,20 @@ void JoystickComponent::shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr 
 
 void JoystickComponent::change_team_color_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
-  if (msg->buttons[button_color_enable_] && d_pad(msg, d_pad_change_color_) ){
-      if(has_changed_team_color_ == false){
-        is_yellow_ = !is_yellow_;
-        has_changed_team_color_ = true;
+  if (msg->buttons[button_color_enable_] && d_pad(msg, d_pad_change_color_)) {
+    if (has_changed_team_color_ == false) {
+      is_yellow_ = !is_yellow_;
+      has_changed_team_color_ = true;
 
-        if(is_yellow_){
-          RCLCPP_INFO(this->get_logger(), "Target team color is yellow.");
-        }else{
-          RCLCPP_INFO(this->get_logger(), "Target team color is blue.");
-        }
+      if (is_yellow_) {
+        RCLCPP_INFO(this->get_logger(), "Target team color is yellow.");
+      } else {
+        RCLCPP_INFO(this->get_logger(), "Target team color is blue.");
       }
-  }else{
+    }
+  } else {
     has_changed_team_color_ = false;
   }
-
 }
 
 }  // namespace joystick
