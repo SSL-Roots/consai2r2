@@ -56,20 +56,20 @@ consai2r2はROS 2 Dashingに対応しています。
 
 ```zsh
 # ワークスペースの作成
-mkdir -p ~/ros2_ws/src
+$ mkdir -p ~/ros2_ws/src
 
 # consai2r2のクローン
-cd ~/ros2_ws/src
-git clone https://github.com/SSL-Roots/consai2r2
+$ cd ~/ros2_ws/src
+$ git clone https://github.com/SSL-Roots/consai2r2
 
 # 依存関係のインストール
 # 事前にrosdep init, update を実行すること
-rosdep install -r -y --from-paths . --ignore-src
+$ rosdep install -r -y -i --from-paths .
 
 # consai2r2のビルド
-cd ~/ros2_ws
-colcon build
-source ~/ros2_ws/install/setup.bash
+$ cd ~/ros2_ws
+$ colcon build --symlink-install
+$ source ~/ros2_ws/install/setup.bash
 ```
 
 ## consai2r2のデバッグに役立つツールをインストール
@@ -89,7 +89,7 @@ RoboCup SSLのソフトウェア開発に役立ちます。
 下記コマンドでgrSimのロボットをジョイスティックコントローラで操作できます。
 
 ```zsh
-ros2 launch consai2r2_examples joystick_example.launch.py
+$ ros2 launch consai2r2_examples joystick_example.launch.py
 ```
 
 # Development
