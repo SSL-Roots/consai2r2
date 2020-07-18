@@ -38,21 +38,29 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   this->declare_parameter("button_shutdown_1", 8);
   this->declare_parameter("button_shutdown_2", 9);
   this->declare_parameter("button_move_enable", 4);
+  this->declare_parameter("button_color_enable", 5);
   this->declare_parameter("axis_vel_surge", 1);
   this->declare_parameter("axis_vel_sway", 0);
   this->declare_parameter("axis_vel_angular", 2);
+  this->declare_parameter("axis_color_change", 5);
 
   button_shutdown_1_ = this->get_parameter("button_shutdown_1").get_value<int>();
   button_shutdown_2_ = this->get_parameter("button_shutdown_2").get_value<int>();
   button_move_enable_ = this->get_parameter("button_move_enable").get_value<int>();
+  button_color_enable_ = this->get_parameter("button_color_enable").get_value<int>();
   axis_vel_surge_ = this->get_parameter("axis_vel_surge").get_value<int>();
   axis_vel_sway_ = this->get_parameter("axis_vel_sway").get_value<int>();
   axis_vel_angular_ = this->get_parameter("axis_vel_angular").get_value<int>();
+  axis_color_change_ = this->get_parameter("axis_color_change").get_value<int>();
+
+  is_yellow_ = false;
+  has_changed_team_color_ = false;
 
   auto callback =
     [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void
     {
       shutdown_via_joy(msg);
+      change_team_color_via_joy(msg);
       publish_robot_commands(msg);
     };
 
@@ -87,10 +95,31 @@ void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::Shar
 
 void JoystickComponent::shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
-  if (msg->buttons[button_shutdown_1_] && msg->buttons[button_shutdown_2_]){
+  if (msg->buttons[button_shutdown_1_] && msg->buttons[button_shutdown_2_]) {
     RCLCPP_INFO(this->get_logger(), "Shutdown.");
     rclcpp::shutdown();
   }
+}
+
+void JoystickComponent::change_team_color_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg)
+{
+  const double THRESHOLD = 0.5;
+
+  if (msg->buttons[button_color_enable_] && std::fabs(msg->axes[axis_color_change_]) > THRESHOLD){
+      if(has_changed_team_color_ == false){
+        is_yellow_ = !is_yellow_;
+        has_changed_team_color_ = true;
+
+        if(is_yellow_){
+          RCLCPP_INFO(this->get_logger(), "Target team color is yellow.");
+        }else{
+          RCLCPP_INFO(this->get_logger(), "Target team color is blue.");
+        }
+      }
+  }else{
+    has_changed_team_color_ = false;
+  }
+
 }
 
 }  // namespace joystick
