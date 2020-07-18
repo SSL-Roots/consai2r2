@@ -23,9 +23,11 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.actions import IncludeLaunchDescription
 from launch.actions import LogInfo
 from launch.actions import OpaqueFunction
 from launch.actions import SetLaunchConfiguration
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -35,7 +37,14 @@ def generate_launch_description():
     # parameter
     dev = LaunchConfiguration('dev')
     # sim = LaunchConfiguration('sim')  # TODO : 現在未使用 シミュレータの切り替え用
-    # TODO : consai2r2_descriptionからのパラメータ読み込み
+
+    include_consai2r2_description = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('consai2r2_description'),
+            'launch'),
+            '/config.launch.py'
+        ]),
+    )
 
     declare_dev_cmd = DeclareLaunchArgument(
         'dev', default_value='/dev/input/js0',
@@ -80,6 +89,7 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
+    ld.add_action(include_consai2r2_description)
     ld.add_action(declare_dev_cmd)
     ld.add_action(declare_joyconfig)
 

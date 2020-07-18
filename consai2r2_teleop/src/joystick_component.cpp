@@ -72,6 +72,16 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   is_yellow_ = false;
   has_changed_team_color_ = false;
 
+  auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this, "consai2r2_description");
+  while (!parameters_client->wait_for_service(1s)) {
+    if(!rclcpp::ok()) {
+      RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for theservice. Exiting.");
+      rclcpp::shutdown();
+    }
+    RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
+  }
+  max_id_ = parameters_client->get_parameter("max_id", 15);
+
   auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
       shutdown_via_joy(msg);
       change_team_color_via_joy(msg);

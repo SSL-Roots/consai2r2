@@ -55,6 +55,7 @@ private:
 
   std::string d_pad_change_color_;
 
+  int max_id_;
   bool is_yellow_;
   bool has_changed_team_color_;
 
