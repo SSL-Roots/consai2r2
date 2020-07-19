@@ -49,6 +49,9 @@ private:
   int button_shutdown_2_;
   int button_move_enable_;
   int button_color_id_enable_;
+  int button_kick_enable_;
+  int button_kick_straight_;
+  int button_kick_chip_;
   int axis_vel_sway_;
   int axis_vel_surge_;
   int axis_vel_angular_;
@@ -69,6 +72,8 @@ private:
   bool has_changed_target_id_;
   double velocity_gain_;
   bool has_changed_velocity_gain_;
+  double kick_power_;
+  bool has_changed_kick_power_;
 
   rclcpp::Publisher<consai2r2_msgs::msg::RobotCommands>::SharedPtr pub_commands_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
@@ -83,6 +88,8 @@ private:
   void shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
   void change_color_id_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
   void set_move_velocity_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+    consai2r2_msgs::msg::RobotCommand & command);
+  void set_kick_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
     consai2r2_msgs::msg::RobotCommand & command);
 };
 

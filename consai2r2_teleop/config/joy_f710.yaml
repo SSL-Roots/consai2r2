@@ -11,21 +11,19 @@ consai2r2_teleop:
 
     button_shutdown_1       : 8
     button_shutdown_2       : 9
+    button_color_id_enable  : 6
 
     button_move_enable      : 4
     axis_vel_surge          : 1
     axis_vel_sway           : 0
     axis_vel_angular        : 2
 
-    # button_kick_enable      : 5
-    # button_kick_straight    : 0
-    # button_kick_chip        : 3
-    # axis_kick_power         : 5
+    button_kick_enable      : 5
+    button_kick_straight    : 0
+    button_kick_chip        : 3
 
     # button_dribble_enable   : 7
     # axis_dribble_power      : 5
-
-    button_color_id_enable  : 6
 
     d_pad_change_color      : "right"
     d_pad_increment         : "up"

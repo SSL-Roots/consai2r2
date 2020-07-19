@@ -43,8 +43,11 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
 
   this->declare_parameter("button_shutdown_1", 8);
   this->declare_parameter("button_shutdown_2", 9);
-  this->declare_parameter("button_move_enable", 4);
   this->declare_parameter("button_color_id_enable", 6);
+  this->declare_parameter("button_move_enable", 4);
+  this->declare_parameter("button_kick_enable", 5);
+  this->declare_parameter("button_kick_straight", 0);
+  this->declare_parameter("button_kick_chip", 3);
   this->declare_parameter("axis_vel_surge", 1);
   this->declare_parameter("axis_vel_sway", 0);
   this->declare_parameter("axis_vel_angular", 2);
@@ -64,8 +67,11 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
 
   button_shutdown_1_ = this->get_parameter("button_shutdown_1").get_value<int>();
   button_shutdown_2_ = this->get_parameter("button_shutdown_2").get_value<int>();
-  button_move_enable_ = this->get_parameter("button_move_enable").get_value<int>();
   button_color_id_enable_ = this->get_parameter("button_color_id_enable").get_value<int>();
+  button_move_enable_ = this->get_parameter("button_move_enable").get_value<int>();
+  button_kick_enable_ = this->get_parameter("button_kick_enable").get_value<int>();
+  button_kick_straight_ = this->get_parameter("button_kick_straight").get_value<int>();
+  button_kick_chip_ = this->get_parameter("button_kick_chip").get_value<int>();
   axis_vel_surge_ = this->get_parameter("axis_vel_surge").get_value<int>();
   axis_vel_sway_ = this->get_parameter("axis_vel_sway").get_value<int>();
   axis_vel_angular_ = this->get_parameter("axis_vel_angular").get_value<int>();
@@ -95,6 +101,8 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   has_changed_target_id_ = false;
   velocity_gain_ = 0.5;
   has_changed_velocity_gain_ = false;
+  kick_power_ = 0.5;
+  has_changed_kick_power_ = false;
 
   auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
       shutdown_via_joy(msg);
@@ -103,6 +111,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
       auto command = std::make_unique<consai2r2_msgs::msg::RobotCommand>();
       command->robot_id = target_id_;
       set_move_velocity_via_joy(msg, *command);
+      set_kick_power_via_joy(msg, *command);
 
       auto robot_commands = std::make_unique<consai2r2_msgs::msg::RobotCommands>();
       robot_commands->header.stamp = this->now();
@@ -211,15 +220,16 @@ void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::S
     consai2r2_msgs::msg::RobotCommand & command)
 {
   const double MAX_VELOCITY_GAIN = 1.0;
+  const double MIN_VELOCITY_GAIN = 0.0;
   const double STEP_VELOCITY_GAIN = 0.1;
   const double DEFAULT_VELOCITY_GAIN = 0.5;
 
   if (msg->buttons[button_move_enable_]) {
     if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_) || d_pad(msg, d_pad_reset_)) {
       if (!has_changed_velocity_gain_){
-        if (d_pad(msg, d_pad_increment_) && velocity_gain_ <= MAX_VELOCITY_GAIN) {
+        if (d_pad(msg, d_pad_increment_) && velocity_gain_ < MAX_VELOCITY_GAIN) {
           velocity_gain_ += STEP_VELOCITY_GAIN;
-        } else if (d_pad(msg, d_pad_decrement_) && velocity_gain_ >= STEP_VELOCITY_GAIN) {
+        } else if (d_pad(msg, d_pad_decrement_) && velocity_gain_ > MIN_VELOCITY_GAIN) {
           velocity_gain_ -= STEP_VELOCITY_GAIN;
         } else if (d_pad(msg, d_pad_reset_)){
           velocity_gain_ = DEFAULT_VELOCITY_GAIN;
@@ -227,8 +237,8 @@ void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::S
 
         if (velocity_gain_ > MAX_VELOCITY_GAIN){
           velocity_gain_ = MAX_VELOCITY_GAIN;
-        } else if( velocity_gain_ < STEP_VELOCITY_GAIN){
-          velocity_gain_ = STEP_VELOCITY_GAIN;
+        } else if( velocity_gain_ < MIN_VELOCITY_GAIN){
+          velocity_gain_ = MIN_VELOCITY_GAIN;
         }
 
         has_changed_velocity_gain_ = true;
@@ -245,6 +255,48 @@ void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::S
     command.vel_surge = msg->axes[axis_vel_surge_] * max_vel_surge_ * velocity_gain_;
     command.vel_sway = msg->axes[axis_vel_sway_] * max_vel_sway_ * velocity_gain_;
     command.vel_angular = msg->axes[axis_vel_angular_] * max_vel_angular_ * velocity_gain_;
+  }
+}
+
+
+void JoystickComponent::set_kick_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+    consai2r2_msgs::msg::RobotCommand & command)
+{
+  const double MAX_KICK_POWER = 1.0;
+  const double MIN_KICK_POWER = 0.0;
+  const double STEP_KICK_POWER = 0.1;
+  const double DEFAULT_KICK_POWER = 0.5;
+
+  if (msg->buttons[button_kick_enable_]) {
+    if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_) || d_pad(msg, d_pad_reset_)) {
+      if (!has_changed_kick_power_){
+        if (d_pad(msg, d_pad_increment_) && kick_power_ <= MAX_KICK_POWER) {
+          kick_power_ += STEP_KICK_POWER;
+        } else if (d_pad(msg, d_pad_decrement_) && kick_power_ > MIN_KICK_POWER) {
+          kick_power_ -= STEP_KICK_POWER;
+        } else if (d_pad(msg, d_pad_reset_)){
+          kick_power_ = DEFAULT_KICK_POWER;
+        }
+
+        if (kick_power_ > MAX_KICK_POWER){
+          kick_power_ = MAX_KICK_POWER;
+        } else if(kick_power_ < MIN_KICK_POWER){
+          kick_power_ = MIN_KICK_POWER;
+        }
+
+        has_changed_kick_power_ = true;
+        RCLCPP_INFO(this->get_logger(), "Kick power is: %f", kick_power_);
+      }
+    } else {
+      has_changed_kick_power_ = false;
+    }
+
+    if (msg->buttons[button_kick_straight_]){
+      command.kick_power = kick_power_;
+    }else if(msg->buttons[button_kick_chip_]){
+      command.kick_power = kick_power_;
+      command.chip_enable = true;
+    }
   }
 }
 
