@@ -93,6 +93,8 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   has_changed_team_color_ = false;
   target_id_ = 0;
   has_changed_target_id_ = false;
+  velocity_gain_ = 0.5;
+  has_changed_velocity_gain_ = false;
 
   auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
       shutdown_via_joy(msg);
@@ -208,10 +210,41 @@ void JoystickComponent::change_color_id_via_joy(const sensor_msgs::msg::Joy::Sha
 void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
     consai2r2_msgs::msg::RobotCommand & command)
 {
+  const double MAX_VELOCITY_GAIN = 1.0;
+  const double STEP_VELOCITY_GAIN = 0.1;
+  const double DEFAULT_VELOCITY_GAIN = 0.5;
+
   if (msg->buttons[button_move_enable_]) {
-    command.vel_surge = msg->axes[axis_vel_surge_] * max_vel_surge_;
-    command.vel_sway = msg->axes[axis_vel_sway_] * max_vel_sway_;
-    command.vel_angular = msg->axes[axis_vel_angular_] * max_vel_angular_;
+    if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_) || d_pad(msg, d_pad_reset_)) {
+      if (!has_changed_velocity_gain_){
+        if (d_pad(msg, d_pad_increment_) && velocity_gain_ <= MAX_VELOCITY_GAIN) {
+          velocity_gain_ += STEP_VELOCITY_GAIN;
+        } else if (d_pad(msg, d_pad_decrement_) && velocity_gain_ >= STEP_VELOCITY_GAIN) {
+          velocity_gain_ -= STEP_VELOCITY_GAIN;
+        } else if (d_pad(msg, d_pad_reset_)){
+          velocity_gain_ = DEFAULT_VELOCITY_GAIN;
+        }
+
+        if (velocity_gain_ > MAX_VELOCITY_GAIN){
+          velocity_gain_ = MAX_VELOCITY_GAIN;
+        } else if( velocity_gain_ < STEP_VELOCITY_GAIN){
+          velocity_gain_ = STEP_VELOCITY_GAIN;
+        }
+
+        has_changed_velocity_gain_ = true;
+        RCLCPP_INFO(this->get_logger(),
+          "Max velocities are surge: %f, sway: %f, angular: %f",
+          max_vel_surge_ * velocity_gain_,
+          max_vel_sway_ * velocity_gain_,
+          max_vel_angular_ * velocity_gain_);
+      }
+    } else {
+      has_changed_velocity_gain_ = false;
+    }
+
+    command.vel_surge = msg->axes[axis_vel_surge_] * max_vel_surge_ * velocity_gain_;
+    command.vel_sway = msg->axes[axis_vel_sway_] * max_vel_sway_ * velocity_gain_;
+    command.vel_angular = msg->axes[axis_vel_angular_] * max_vel_angular_ * velocity_gain_;
   }
 }
 

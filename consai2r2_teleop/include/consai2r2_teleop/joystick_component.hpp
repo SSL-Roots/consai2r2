@@ -67,6 +67,8 @@ private:
   bool has_changed_team_color_;
   int target_id_;
   bool has_changed_target_id_;
+  double velocity_gain_;
+  bool has_changed_velocity_gain_;
 
   rclcpp::Publisher<consai2r2_msgs::msg::RobotCommands>::SharedPtr pub_commands_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
