@@ -90,11 +90,14 @@ private:
   bool d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const std::string target);
   void shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
   void change_color_id_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
-  void set_move_velocity_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+  void set_move_velocity_via_joy(
+    const sensor_msgs::msg::Joy::SharedPtr msg,
     consai2r2_msgs::msg::RobotCommand & command);
-  void set_kick_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+  void set_kick_power_via_joy(
+    const sensor_msgs::msg::Joy::SharedPtr msg,
     consai2r2_msgs::msg::RobotCommand & command);
-  void set_dribble_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+  void set_dribble_power_via_joy(
+    const sensor_msgs::msg::Joy::SharedPtr msg,
     consai2r2_msgs::msg::RobotCommand & command);
 };
 

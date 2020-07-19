@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "consai2r2_teleop/joystick_component.hpp"
 
@@ -221,8 +222,9 @@ void JoystickComponent::change_color_id_via_joy(const sensor_msgs::msg::Joy::Sha
   }  // enable button pressed
 }
 
-void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
-    consai2r2_msgs::msg::RobotCommand & command)
+void JoystickComponent::set_move_velocity_via_joy(
+  const sensor_msgs::msg::Joy::SharedPtr msg,
+  consai2r2_msgs::msg::RobotCommand & command)
 {
   const double MAX_VELOCITY_GAIN = 1.0;
   const double MIN_VELOCITY_GAIN = 0.0;
@@ -231,18 +233,18 @@ void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::S
 
   if (msg->buttons[button_move_enable_]) {
     if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_) || d_pad(msg, d_pad_reset_)) {
-      if (!has_changed_velocity_gain_){
+      if (!has_changed_velocity_gain_) {
         if (d_pad(msg, d_pad_increment_) && velocity_gain_ < MAX_VELOCITY_GAIN) {
           velocity_gain_ += STEP_VELOCITY_GAIN;
         } else if (d_pad(msg, d_pad_decrement_) && velocity_gain_ > MIN_VELOCITY_GAIN) {
           velocity_gain_ -= STEP_VELOCITY_GAIN;
-        } else if (d_pad(msg, d_pad_reset_)){
+        } else if (d_pad(msg, d_pad_reset_)) {
           velocity_gain_ = DEFAULT_VELOCITY_GAIN;
         }
 
-        if (velocity_gain_ > MAX_VELOCITY_GAIN){
+        if (velocity_gain_ > MAX_VELOCITY_GAIN) {
           velocity_gain_ = MAX_VELOCITY_GAIN;
-        } else if( velocity_gain_ < MIN_VELOCITY_GAIN){
+        } else if (velocity_gain_ < MIN_VELOCITY_GAIN) {
           velocity_gain_ = MIN_VELOCITY_GAIN;
         }
 
@@ -264,8 +266,9 @@ void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::S
 }
 
 
-void JoystickComponent::set_kick_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
-    consai2r2_msgs::msg::RobotCommand & command)
+void JoystickComponent::set_kick_power_via_joy(
+  const sensor_msgs::msg::Joy::SharedPtr msg,
+  consai2r2_msgs::msg::RobotCommand & command)
 {
   const double MAX_KICK_POWER = 1.0;
   const double MIN_KICK_POWER = 0.0;
@@ -274,18 +277,18 @@ void JoystickComponent::set_kick_power_via_joy(const sensor_msgs::msg::Joy::Shar
 
   if (msg->buttons[button_kick_enable_]) {
     if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_) || d_pad(msg, d_pad_reset_)) {
-      if (!has_changed_kick_power_){
+      if (!has_changed_kick_power_) {
         if (d_pad(msg, d_pad_increment_) && kick_power_ <= MAX_KICK_POWER) {
           kick_power_ += STEP_KICK_POWER;
         } else if (d_pad(msg, d_pad_decrement_) && kick_power_ > MIN_KICK_POWER) {
           kick_power_ -= STEP_KICK_POWER;
-        } else if (d_pad(msg, d_pad_reset_)){
+        } else if (d_pad(msg, d_pad_reset_)) {
           kick_power_ = DEFAULT_KICK_POWER;
         }
 
-        if (kick_power_ > MAX_KICK_POWER){
+        if (kick_power_ > MAX_KICK_POWER) {
           kick_power_ = MAX_KICK_POWER;
-        } else if(kick_power_ < MIN_KICK_POWER){
+        } else if (kick_power_ < MIN_KICK_POWER) {
           kick_power_ = MIN_KICK_POWER;
         }
 
@@ -296,17 +299,18 @@ void JoystickComponent::set_kick_power_via_joy(const sensor_msgs::msg::Joy::Shar
       has_changed_kick_power_ = false;
     }
 
-    if (msg->buttons[button_kick_straight_]){
+    if (msg->buttons[button_kick_straight_]) {
       command.kick_power = kick_power_;
-    }else if(msg->buttons[button_kick_chip_]){
+    } else if (msg->buttons[button_kick_chip_]) {
       command.kick_power = kick_power_;
       command.chip_enable = true;
     }
   }
 }
 
-void JoystickComponent::set_dribble_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
-    consai2r2_msgs::msg::RobotCommand & command)
+void JoystickComponent::set_dribble_power_via_joy(
+  const sensor_msgs::msg::Joy::SharedPtr msg,
+  consai2r2_msgs::msg::RobotCommand & command)
 {
   const double MAX_DRIBBLE_POWER = 1.0;
   const double MIN_DRIBBLE_POWER = 0.0;
@@ -315,18 +319,18 @@ void JoystickComponent::set_dribble_power_via_joy(const sensor_msgs::msg::Joy::S
 
   if (msg->buttons[button_dribble_enable_]) {
     if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_) || d_pad(msg, d_pad_reset_)) {
-      if (!has_changed_dribble_power_){
+      if (!has_changed_dribble_power_) {
         if (d_pad(msg, d_pad_increment_) && dribble_power_ <= MAX_DRIBBLE_POWER) {
           dribble_power_ += STEP_DRIBBLE_POWER;
         } else if (d_pad(msg, d_pad_decrement_) && dribble_power_ > MIN_DRIBBLE_POWER) {
           dribble_power_ -= STEP_DRIBBLE_POWER;
-        } else if (d_pad(msg, d_pad_reset_)){
+        } else if (d_pad(msg, d_pad_reset_)) {
           dribble_power_ = DEFAULT_DRIBBLE_POWER;
         }
 
-        if (dribble_power_ > MAX_DRIBBLE_POWER){
+        if (dribble_power_ > MAX_DRIBBLE_POWER) {
           dribble_power_ = MAX_DRIBBLE_POWER;
-        } else if(dribble_power_ < MIN_DRIBBLE_POWER){
+        } else if (dribble_power_ < MIN_DRIBBLE_POWER) {
           dribble_power_ = MIN_DRIBBLE_POWER;
         }
 
