@@ -59,6 +59,10 @@ private:
   std::string d_pad_reset_;
 
   int max_id_;
+  double max_vel_surge_;
+  double max_vel_sway_;
+  double max_vel_angular_;
+
   bool is_yellow_;
   bool has_changed_team_color_;
   int target_id_;

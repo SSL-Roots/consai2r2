@@ -85,6 +85,9 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
     RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");
   }
   max_id_ = parameters_client->get_parameter("max_id", 15);
+  max_vel_surge_ = parameters_client->get_parameter("max_velocity_surge", 3.0);
+  max_vel_sway_ = parameters_client->get_parameter("max_velocity_sway", 3.0);
+  max_vel_angular_ = parameters_client->get_parameter("max_velocity_angular", 3.14);
 
   is_yellow_ = false;
   has_changed_team_color_ = false;
@@ -153,17 +156,12 @@ bool JoystickComponent::d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const 
 
 void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
-  // FIXME: WE HAVE TO USE ROS_PARAM
-  const double MAX_VEL_SURGE = 1.0;
-  const double MAX_VEL_SWAY = 1.0;
-  const double MAX_VEL_ANGULAR = M_PI;
-
   consai2r2_msgs::msg::RobotCommand command;
 
   if (msg->buttons[button_move_enable_]) {
-    command.vel_surge = msg->axes[axis_vel_surge_] * MAX_VEL_SURGE;
-    command.vel_sway = msg->axes[axis_vel_sway_] * MAX_VEL_SWAY;
-    command.vel_angular = msg->axes[axis_vel_angular_] * MAX_VEL_ANGULAR;
+    command.vel_surge = msg->axes[axis_vel_surge_] * max_vel_surge_;
+    command.vel_sway = msg->axes[axis_vel_sway_] * max_vel_sway_;
+    command.vel_angular = msg->axes[axis_vel_angular_] * max_vel_angular_;
   }
 
   command.robot_id = target_id_;
