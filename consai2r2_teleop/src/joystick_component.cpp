@@ -48,6 +48,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   this->declare_parameter("button_kick_enable", 5);
   this->declare_parameter("button_kick_straight", 0);
   this->declare_parameter("button_kick_chip", 3);
+  this->declare_parameter("button_dribble_enable", 7);
   this->declare_parameter("axis_vel_surge", 1);
   this->declare_parameter("axis_vel_sway", 0);
   this->declare_parameter("axis_vel_angular", 2);
@@ -72,6 +73,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   button_kick_enable_ = this->get_parameter("button_kick_enable").get_value<int>();
   button_kick_straight_ = this->get_parameter("button_kick_straight").get_value<int>();
   button_kick_chip_ = this->get_parameter("button_kick_chip").get_value<int>();
+  button_dribble_enable_ = this->get_parameter("button_dribble_enable").get_value<int>();
   axis_vel_surge_ = this->get_parameter("axis_vel_surge").get_value<int>();
   axis_vel_sway_ = this->get_parameter("axis_vel_sway").get_value<int>();
   axis_vel_angular_ = this->get_parameter("axis_vel_angular").get_value<int>();
@@ -103,6 +105,8 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   has_changed_velocity_gain_ = false;
   kick_power_ = 0.5;
   has_changed_kick_power_ = false;
+  dribble_power_ = 0.5;
+  has_changed_dribble_power_ = false;
 
   auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
       shutdown_via_joy(msg);
@@ -112,6 +116,7 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
       command->robot_id = target_id_;
       set_move_velocity_via_joy(msg, *command);
       set_kick_power_via_joy(msg, *command);
+      set_dribble_power_via_joy(msg, *command);
 
       auto robot_commands = std::make_unique<consai2r2_msgs::msg::RobotCommands>();
       robot_commands->header.stamp = this->now();
@@ -297,6 +302,42 @@ void JoystickComponent::set_kick_power_via_joy(const sensor_msgs::msg::Joy::Shar
       command.kick_power = kick_power_;
       command.chip_enable = true;
     }
+  }
+}
+
+void JoystickComponent::set_dribble_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+    consai2r2_msgs::msg::RobotCommand & command)
+{
+  const double MAX_DRIBBLE_POWER = 1.0;
+  const double MIN_DRIBBLE_POWER = 0.0;
+  const double STEP_DRIBBLE_POWER = 0.1;
+  const double DEFAULT_DRIBBLE_POWER = 0.5;
+
+  if (msg->buttons[button_dribble_enable_]) {
+    if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_) || d_pad(msg, d_pad_reset_)) {
+      if (!has_changed_dribble_power_){
+        if (d_pad(msg, d_pad_increment_) && dribble_power_ <= MAX_DRIBBLE_POWER) {
+          dribble_power_ += STEP_DRIBBLE_POWER;
+        } else if (d_pad(msg, d_pad_decrement_) && dribble_power_ > MIN_DRIBBLE_POWER) {
+          dribble_power_ -= STEP_DRIBBLE_POWER;
+        } else if (d_pad(msg, d_pad_reset_)){
+          dribble_power_ = DEFAULT_DRIBBLE_POWER;
+        }
+
+        if (dribble_power_ > MAX_DRIBBLE_POWER){
+          dribble_power_ = MAX_DRIBBLE_POWER;
+        } else if(dribble_power_ < MIN_DRIBBLE_POWER){
+          dribble_power_ = MIN_DRIBBLE_POWER;
+        }
+
+        has_changed_dribble_power_ = true;
+        RCLCPP_INFO(this->get_logger(), "Dribble power is: %f", dribble_power_);
+      }
+    } else {
+      has_changed_dribble_power_ = false;
+    }
+
+    command.dribble_power = dribble_power_;
   }
 }
 

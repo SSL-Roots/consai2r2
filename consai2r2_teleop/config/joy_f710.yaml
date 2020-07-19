@@ -22,8 +22,7 @@ consai2r2_teleop:
     button_kick_straight    : 0
     button_kick_chip        : 3
 
-    # button_dribble_enable   : 7
-    # axis_dribble_power      : 5
+    button_dribble_enable   : 7
 
     d_pad_change_color      : "right"
     d_pad_increment         : "up"

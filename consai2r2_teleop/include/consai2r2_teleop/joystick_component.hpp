@@ -52,6 +52,7 @@ private:
   int button_kick_enable_;
   int button_kick_straight_;
   int button_kick_chip_;
+  int button_dribble_enable_;
   int axis_vel_sway_;
   int axis_vel_surge_;
   int axis_vel_angular_;
@@ -74,6 +75,8 @@ private:
   bool has_changed_velocity_gain_;
   double kick_power_;
   bool has_changed_kick_power_;
+  double dribble_power_;
+  bool has_changed_dribble_power_;
 
   rclcpp::Publisher<consai2r2_msgs::msg::RobotCommands>::SharedPtr pub_commands_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
@@ -90,6 +93,8 @@ private:
   void set_move_velocity_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
     consai2r2_msgs::msg::RobotCommand & command);
   void set_kick_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+    consai2r2_msgs::msg::RobotCommand & command);
+  void set_dribble_power_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
     consai2r2_msgs::msg::RobotCommand & command);
 };
 
