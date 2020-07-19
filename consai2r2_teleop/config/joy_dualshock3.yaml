@@ -25,8 +25,9 @@ consai2r2_teleop:
     # button_dribble_enable   : 7
     # axis_dribble_power      : 5
 
-    # button_id_enable        : 9
-    # axis_id_change          : 5
+    button_color_id_enable  : 6
 
-    button_color_enable     : 6
     d_pad_change_color      : "right"
+    d_pad_increment         : "up"
+    d_pad_decrement         : "down"
+    d_pad_reset             : "right"

@@ -41,8 +41,7 @@ def generate_launch_description():
     include_consai2r2_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('consai2r2_description'),
-            'launch'),
-            '/config.launch.py'
+                         'launch'), '/config.launch.py'
         ]),
     )
 
@@ -66,7 +65,8 @@ def generate_launch_description():
             return [SetLaunchConfiguration('joyconfig_filename', param_file)]
         else:
             return [LogInfo(msg=param_file + ' is not exist.')]
-    get_joyconfig_filename = OpaqueFunction(function=func_get_joyconfig_filename)
+    get_joyconfig_filename = OpaqueFunction(
+        function=func_get_joyconfig_filename)
 
     start_joy_node_cmd = Node(
         package='joy', node_executable='joy_node',

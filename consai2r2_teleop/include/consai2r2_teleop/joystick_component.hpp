@@ -48,16 +48,21 @@ private:
   int button_shutdown_1_;
   int button_shutdown_2_;
   int button_move_enable_;
-  int button_color_enable_;
+  int button_color_id_enable_;
   int axis_vel_sway_;
   int axis_vel_surge_;
   int axis_vel_angular_;
 
   std::string d_pad_change_color_;
+  std::string d_pad_increment_;
+  std::string d_pad_decrement_;
+  std::string d_pad_reset_;
 
   int max_id_;
   bool is_yellow_;
   bool has_changed_team_color_;
+  int target_id_;
+  bool has_changed_target_id_;
 
   rclcpp::Publisher<consai2r2_msgs::msg::RobotCommands>::SharedPtr pub_commands_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
@@ -71,7 +76,7 @@ private:
   bool d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const std::string target);
   void publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg);
   void shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
-  void change_team_color_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void change_color_id_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
 };
 
 }  // namespace joystick

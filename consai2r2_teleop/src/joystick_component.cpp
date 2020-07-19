@@ -44,12 +44,15 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   this->declare_parameter("button_shutdown_1", 8);
   this->declare_parameter("button_shutdown_2", 9);
   this->declare_parameter("button_move_enable", 4);
-  this->declare_parameter("button_color_enable", 5);
+  this->declare_parameter("button_color_id_enable", 6);
   this->declare_parameter("axis_vel_surge", 1);
   this->declare_parameter("axis_vel_sway", 0);
   this->declare_parameter("axis_vel_angular", 2);
 
   this->declare_parameter("d_pad_change_color", "right");
+  this->declare_parameter("d_pad_increment", "up");
+  this->declare_parameter("d_pad_decrement", "down");
+  this->declare_parameter("d_pad_reset", "right");
 
   has_analog_d_pad_ = this->get_parameter("has_analog_d_pad").get_value<bool>();
   d_pad_up_ = this->get_parameter("d_pad_up").get_value<int>();
@@ -62,19 +65,20 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   button_shutdown_1_ = this->get_parameter("button_shutdown_1").get_value<int>();
   button_shutdown_2_ = this->get_parameter("button_shutdown_2").get_value<int>();
   button_move_enable_ = this->get_parameter("button_move_enable").get_value<int>();
-  button_color_enable_ = this->get_parameter("button_color_enable").get_value<int>();
+  button_color_id_enable_ = this->get_parameter("button_color_id_enable").get_value<int>();
   axis_vel_surge_ = this->get_parameter("axis_vel_surge").get_value<int>();
   axis_vel_sway_ = this->get_parameter("axis_vel_sway").get_value<int>();
   axis_vel_angular_ = this->get_parameter("axis_vel_angular").get_value<int>();
 
   d_pad_change_color_ = this->get_parameter("d_pad_change_color").get_value<std::string>();
+  d_pad_increment_ = this->get_parameter("d_pad_increment").get_value<std::string>();
+  d_pad_decrement_ = this->get_parameter("d_pad_decrement").get_value<std::string>();
+  d_pad_reset_ = this->get_parameter("d_pad_reset").get_value<std::string>();
 
-  is_yellow_ = false;
-  has_changed_team_color_ = false;
-
-  auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this, "consai2r2_description");
+  auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this,
+      "consai2r2_description");
   while (!parameters_client->wait_for_service(1s)) {
-    if(!rclcpp::ok()) {
+    if (!rclcpp::ok()) {
       RCLCPP_ERROR(this->get_logger(), "Interrupted while waiting for theservice. Exiting.");
       rclcpp::shutdown();
     }
@@ -82,9 +86,14 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   }
   max_id_ = parameters_client->get_parameter("max_id", 15);
 
+  is_yellow_ = false;
+  has_changed_team_color_ = false;
+  target_id_ = 0;
+  has_changed_target_id_ = false;
+
   auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
       shutdown_via_joy(msg);
-      change_team_color_via_joy(msg);
+      change_color_id_via_joy(msg);
       publish_robot_commands(msg);
     };
 
@@ -157,7 +166,7 @@ void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::Shar
     command.vel_angular = msg->axes[axis_vel_angular_] * MAX_VEL_ANGULAR;
   }
 
-  command.robot_id = 0;
+  command.robot_id = target_id_;
 
   consai2r2_msgs::msg::RobotCommands robot_commands;
   robot_commands.header.stamp = this->now();
@@ -175,22 +184,37 @@ void JoystickComponent::shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr 
   }
 }
 
-void JoystickComponent::change_team_color_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg)
+void JoystickComponent::change_color_id_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
-  if (msg->buttons[button_color_enable_] && d_pad(msg, d_pad_change_color_)) {
-    if (has_changed_team_color_ == false) {
-      is_yellow_ = !is_yellow_;
-      has_changed_team_color_ = true;
-
-      if (is_yellow_) {
-        RCLCPP_INFO(this->get_logger(), "Target team color is yellow.");
-      } else {
-        RCLCPP_INFO(this->get_logger(), "Target team color is blue.");
+  if (msg->buttons[button_color_id_enable_]) {
+    if (d_pad(msg, d_pad_change_color_)) {
+      if (!has_changed_team_color_) {
+        is_yellow_ = !is_yellow_;
+        has_changed_team_color_ = true;
+        if (is_yellow_) {
+          RCLCPP_INFO(this->get_logger(), "Target team color is yellow.");
+        } else {
+          RCLCPP_INFO(this->get_logger(), "Target team color is blue.");
+        }
       }
+    } else {
+      has_changed_team_color_ = false;
     }
-  } else {
-    has_changed_team_color_ = false;
-  }
+
+    if (d_pad(msg, d_pad_increment_) || d_pad(msg, d_pad_decrement_)) {
+      if (!has_changed_target_id_) {
+        if (d_pad(msg, d_pad_increment_) && target_id_ < max_id_) {
+          target_id_++;
+        } else if (d_pad(msg, d_pad_decrement_) && target_id_ > 0) {
+          target_id_--;
+        }
+        has_changed_target_id_ = true;
+        RCLCPP_INFO(this->get_logger(), "Target robot ID is %d.", target_id_);
+      }
+    } else {
+      has_changed_target_id_ = false;
+    }
+  }  // enable button pressed
 }
 
 }  // namespace joystick
