@@ -78,9 +78,10 @@ private:
   bool d_pad_left(const sensor_msgs::msg::Joy::SharedPtr msg);
   bool d_pad_right(const sensor_msgs::msg::Joy::SharedPtr msg);
   bool d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const std::string target);
-  void publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg);
   void shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
   void change_color_id_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
+  void set_move_velocity_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+    consai2r2_msgs::msg::RobotCommand & command);
 };
 
 }  // namespace joystick

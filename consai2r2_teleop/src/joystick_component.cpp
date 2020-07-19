@@ -97,7 +97,17 @@ JoystickComponent::JoystickComponent(const rclcpp::NodeOptions & options)
   auto callback = [this](const sensor_msgs::msg::Joy::SharedPtr msg) -> void {
       shutdown_via_joy(msg);
       change_color_id_via_joy(msg);
-      publish_robot_commands(msg);
+
+      auto command = std::make_unique<consai2r2_msgs::msg::RobotCommand>();
+      command->robot_id = target_id_;
+      set_move_velocity_via_joy(msg, *command);
+
+      auto robot_commands = std::make_unique<consai2r2_msgs::msg::RobotCommands>();
+      robot_commands->header.stamp = this->now();
+      robot_commands->is_yellow = is_yellow_;
+      robot_commands->commands.push_back(*command);
+
+      pub_commands_->publish(std::move(robot_commands));
     };
 
   pub_commands_ = create_publisher<consai2r2_msgs::msg::RobotCommands>("robot_commands", 10);
@@ -154,26 +164,6 @@ bool JoystickComponent::d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const 
   }
 }
 
-void JoystickComponent::publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg)
-{
-  consai2r2_msgs::msg::RobotCommand command;
-
-  if (msg->buttons[button_move_enable_]) {
-    command.vel_surge = msg->axes[axis_vel_surge_] * max_vel_surge_;
-    command.vel_sway = msg->axes[axis_vel_sway_] * max_vel_sway_;
-    command.vel_angular = msg->axes[axis_vel_angular_] * max_vel_angular_;
-  }
-
-  command.robot_id = target_id_;
-
-  consai2r2_msgs::msg::RobotCommands robot_commands;
-  robot_commands.header.stamp = this->now();
-  robot_commands.is_yellow = is_yellow_;
-  robot_commands.commands.push_back(command);
-
-  pub_commands_->publish(robot_commands);
-}
-
 void JoystickComponent::shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
   if (msg->buttons[button_shutdown_1_] && msg->buttons[button_shutdown_2_]) {
@@ -213,6 +203,16 @@ void JoystickComponent::change_color_id_via_joy(const sensor_msgs::msg::Joy::Sha
       has_changed_target_id_ = false;
     }
   }  // enable button pressed
+}
+
+void JoystickComponent::set_move_velocity_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg,
+    consai2r2_msgs::msg::RobotCommand & command)
+{
+  if (msg->buttons[button_move_enable_]) {
+    command.vel_surge = msg->axes[axis_vel_surge_] * max_vel_surge_;
+    command.vel_sway = msg->axes[axis_vel_sway_] * max_vel_sway_;
+    command.vel_angular = msg->axes[axis_vel_angular_] * max_vel_angular_;
+  }
 }
 
 }  // namespace joystick
