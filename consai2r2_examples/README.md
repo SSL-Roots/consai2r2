@@ -23,9 +23,10 @@ consai2r2のサンプルコード集です。
 
 ```sh
 # 例：/dev/input/js0に接続された F710コントローラを使用
-$ ros2 launch consai2r2_examples joystick_example.launch.py dev:=/dev/input/js0 joyconfig:=f710      
+$ ros2 launch consai2r2_examples joystick_example.launch.py dev:=/dev/input/js0 joyconfig:=f710
 
 # 例：/dev/input/js1に接続された DUALSHOCK 3コントローラを使用
+$ ros2 launch consai2r2_examples joystick_example.launch.py dev:=/dev/input/js1 joyconfig:=dualshock3
 ```
 
 ### KeyConfig
@@ -46,8 +47,8 @@ $ ros2 launch consai2r2_examples joystick_example.launch.py dev:=/dev/input/js0 
 
 |Key combination|Function|
 |:---|:---|
-|`R2` + `D-Pad ↑↓`|Change target robot ID (0 ~ `max_id`)|
-|`R1` + `D-Pad →`|Toggle target team color (blue or yellow)|
+|`L2` + `D-Pad ↑↓`|Change target robot ID (0 ~ `max_id`)|
+|`L2` + `D-Pad →`|Toggle target team color (blue or yellow)|
 
 ---
 
