@@ -37,7 +37,7 @@ class VisionWrapper(Node):
         super().__init__('consai2r2_vision_wrapper')
 
         QUEUE_SIZE = 10
-        self._DISAPPERED_TIME_THRESH = 3.0
+        self._DISAPPEARED_TIME_THRESH = 3.0
         self._PUBLISH_ROBOT = {'blue': False, 'yellow': False}
 
         self.declare_parameter('publish_ball', True)
@@ -137,7 +137,7 @@ class VisionWrapper(Node):
                     self._ball_info.velocity, diff_time_secs)
 
                 # 一定時間、座標を受け取らなかったら消滅判定にする
-                if diff_time_secs > self._DISAPPERED_TIME_THRESH:
+                if diff_time_secs > self._DISAPPEARED_TIME_THRESH:
                     self._ball_info.disappeared = True
 
         if self._PUBLISH_BALL:
@@ -182,7 +182,7 @@ class VisionWrapper(Node):
                         self._robot_info[color][robot_id].velocity, diff_time_secs)
 
                     # 一定時間、座標を受け取らなかったら消滅判定にする
-                    if diff_time_secs > self._DISAPPERED_TIME_THRESH:
+                    if diff_time_secs > self._DISAPPEARED_TIME_THRESH:
                         self._robot_info[color][robot_id].disappeared = True
 
         if self._PUBLISH_ROBOT[color]:
