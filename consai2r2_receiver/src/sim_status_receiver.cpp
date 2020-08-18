@@ -47,8 +47,9 @@ public:
 
     this->get_parameter("vision_addr", this->vision_addr);
 
-    auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(this,
-        "consai2r2_description");
+    auto parameters_client = std::make_shared<rclcpp::SyncParametersClient>(
+      this,
+      "consai2r2_description");
     if (!parameters_client->wait_for_service(5s)) {
       throw std::runtime_error("Wait for service timed out");
     }
