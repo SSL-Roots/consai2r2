@@ -33,6 +33,9 @@ add_executable(referee_receiver
 add_executable(vision_receiver
   src/vision_receiver.cpp
 )
+add_executable(sim_status_receiver
+  src/sim_status_receiver.cpp
+)
 ament_target_dependencies(
   referee_receiver
   "rclcpp"
@@ -47,8 +50,16 @@ ament_target_dependencies(
   "consai2r2_msgs"
   "consai2r2_protobuf"
 )
+ament_target_dependencies(
+  sim_status_receiver
+  "rclcpp"
+  "std_msgs"
+  "consai2r2_msgs"
+  "consai2r2_protobuf"
+)
 target_link_libraries(referee_receiver ${PROTOBUF_LIBRARIES} ${consai2r2_protobuf_LIBRARIES} ${Boost_LIBRARIES})
 target_link_libraries(vision_receiver ${PROTOBUF_LIBRARIES} ${consai2r2_protobuf_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(sim_status_receiver ${PROTOBUF_LIBRARIES} ${consai2r2_protobuf_LIBRARIES} ${Boost_LIBRARIES})
 
 install(
   DIRECTORY include/
@@ -58,6 +69,9 @@ install(TARGETS referee_receiver
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 install(TARGETS vision_receiver
+  EXPORT export_${PROJECT_NAME}
+  DESTINATION lib/${PROJECT_NAME})
+install(TARGETS sim_status_receiver
   EXPORT export_${PROJECT_NAME}
   DESTINATION lib/${PROJECT_NAME})
 
