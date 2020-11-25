@@ -2,10 +2,13 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>consai2r2_sender</name>
-  <version>0.0.0</version>
-  <description>Send commands to grSim or real robots</description>
-  <maintainer email="macakasit@gmail.com">akshota</maintainer>
+  <version>0.1.0</version>
+  <description>This package provides senders to transmit commands to the grSim or real robots.</description>
+  <maintainer email="macakasit@gmail.com">ShotaAk</maintainer>
   <license>MIT</license>
+
+  <author>future731</author>
+  <author>spiralray</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
