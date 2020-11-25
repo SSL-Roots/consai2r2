@@ -21,8 +21,6 @@
 #ifndef CONSAI2R2_TELEOP__JOYSTICK_COMPONENT_HPP_
 #define CONSAI2R2_TELEOP__JOYSTICK_COMPONENT_HPP_
 
-#include <string>
-
 #include "consai2r2_msgs/msg/robot_commands.hpp"
 #include "consai2r2_teleop/visibility_control.h"
 #include "rclcpp/rclcpp.hpp"
@@ -30,6 +28,7 @@
 
 namespace joystick
 {
+
 class JoystickComponent : public rclcpp::Node
 {
 public:
@@ -37,68 +36,10 @@ public:
   explicit JoystickComponent(const rclcpp::NodeOptions & options);
 
 private:
-  bool has_analog_d_pad_;
-  int d_pad_up_;
-  int d_pad_down_;
-  int d_pad_left_;
-  int d_pad_right_;
-  bool d_pad_up_is_positive_;
-  bool d_pad_right_is_positive_;
-
-  int button_shutdown_1_;
-  int button_shutdown_2_;
-  int button_move_enable_;
-  int button_color_id_enable_;
-  int button_kick_enable_;
-  int button_kick_straight_;
-  int button_kick_chip_;
-  int button_dribble_enable_;
-  int axis_vel_sway_;
-  int axis_vel_surge_;
-  int axis_vel_angular_;
-
-  std::string d_pad_change_color_;
-  std::string d_pad_increment_;
-  std::string d_pad_decrement_;
-  std::string d_pad_reset_;
-
-  int max_id_;
-  double max_vel_surge_;
-  double max_vel_sway_;
-  double max_vel_angular_;
-
-  bool is_yellow_;
-  bool has_changed_team_color_;
-  int target_id_;
-  bool has_changed_target_id_;
-  double velocity_gain_;
-  bool has_changed_velocity_gain_;
-  double kick_power_;
-  bool has_changed_kick_power_;
-  double dribble_power_;
-  bool has_changed_dribble_power_;
-
   rclcpp::Publisher<consai2r2_msgs::msg::RobotCommands>::SharedPtr pub_commands_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr sub_joy_;
 
-  bool d_pad_pressed(
-    const sensor_msgs::msg::Joy::SharedPtr msg, const int target_pad, const bool positive_on);
-  bool d_pad_up(const sensor_msgs::msg::Joy::SharedPtr msg);
-  bool d_pad_down(const sensor_msgs::msg::Joy::SharedPtr msg);
-  bool d_pad_left(const sensor_msgs::msg::Joy::SharedPtr msg);
-  bool d_pad_right(const sensor_msgs::msg::Joy::SharedPtr msg);
-  bool d_pad(const sensor_msgs::msg::Joy::SharedPtr msg, const std::string target);
-  void shutdown_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
-  void change_color_id_via_joy(const sensor_msgs::msg::Joy::SharedPtr msg);
-  void set_move_velocity_via_joy(
-    const sensor_msgs::msg::Joy::SharedPtr msg,
-    consai2r2_msgs::msg::RobotCommand & command);
-  void set_kick_power_via_joy(
-    const sensor_msgs::msg::Joy::SharedPtr msg,
-    consai2r2_msgs::msg::RobotCommand & command);
-  void set_dribble_power_via_joy(
-    const sensor_msgs::msg::Joy::SharedPtr msg,
-    consai2r2_msgs::msg::RobotCommand & command);
+  void publish_robot_commands(const sensor_msgs::msg::Joy::SharedPtr msg);
 };
 
 }  // namespace joystick

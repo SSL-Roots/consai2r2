@@ -30,9 +30,6 @@ public:
     this->declare_parameter("max_id");
     this->declare_parameter("our_side");
     this->declare_parameter("our_color");
-    this->declare_parameter("max_velocity_surge");
-    this->declare_parameter("max_velocity_sway");
-    this->declare_parameter("max_velocity_angular");
   }
 
 private:

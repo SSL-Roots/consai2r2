@@ -1,8 +1,5 @@
 consai2r2_description:
   ros__parameters:
-    max_id:               15
-    our_side:             'left'
-    our_color:            'blue'
-    max_velocity_surge:   3.0  # m/s
-    max_velocity_sway:    3.0  # m/s
-    max_velocity_angular: 6.28 # rad/s
+    max_id:           15
+    our_side:         'left'
+    our_color:        'blue'
