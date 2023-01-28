@@ -1,5 +1,7 @@
-[![industrial_ci](https://github.com/SSL-Roots/consai2r2/workflows/industrial_ci/badge.svg?branch=master)](https://github.com/SSL-Roots/consai2r2/actions?query=workflow%3Aindustrial_ci+branch%3Amaster)
+**本パッケージの使用は非推奨です。**
 
+https://github.com/SSL-Roots/consai_ros2
+へ開発を移行しています
 
 # CON-SAI2 R2
 
